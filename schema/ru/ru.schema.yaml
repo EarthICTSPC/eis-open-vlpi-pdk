@@ -1,0 +1,524 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/ru/ru.schema.yaml"
+
+title: "EIS-VLPI Replicable Unit Schema"
+description: >
+  Machine-readable schema for Replicable Units (RUs) in the
+  Earth ICT, SPC Very Large Photonic Infrastructure (VLPI) PDK.
+  An RU is a parameterized, tileable physical-computation unit
+  that may be instantiated and composed at wafer scale.
+
+type: object
+
+required:
+  - replicableUnit
+
+properties:
+
+  replicableUnit:
+    type: object
+    required:
+      - identity
+      - geometry
+      - opticalInterfaces
+      - replication
+      - verification
+      - metadata
+
+    properties:
+
+      identity:
+        type: object
+        required:
+          - name
+          - uuid
+          - version
+          - description
+
+        properties:
+          name:
+            type: string
+
+          uuid:
+            type: string
+
+          version:
+            type: string
+
+          description:
+            type: string
+
+          category:
+            type: string
+
+          tags:
+            type: array
+            items:
+              type: string
+
+      geometry:
+        type: object
+        required:
+          - boundary
+          - origin
+          - tilingGrid
+
+        properties:
+
+          boundary:
+            type: object
+            required:
+              - shape
+              - widthUm
+              - heightUm
+
+            properties:
+              shape:
+                type: string
+
+              widthUm:
+                type: number
+                minimum: 0
+
+              heightUm:
+                type: number
+                minimum: 0
+
+              cornerRadiusUm:
+                type: number
+                minimum: 0
+
+          origin:
+            type: object
+            required:
+              - xUm
+              - yUm
+              - reference
+
+            properties:
+              xUm:
+                type: number
+
+              yUm:
+                type: number
+
+              reference:
+                type: string
+
+          tilingGrid:
+            type: object
+            required:
+              - pitchXUm
+              - pitchYUm
+
+            properties:
+              pitchXUm:
+                type: number
+                minimum: 0
+
+              pitchYUm:
+                type: number
+                minimum: 0
+
+              gapXUm:
+                type: number
+                minimum: 0
+
+              gapYUm:
+                type: number
+                minimum: 0
+
+              alignmentToleranceNm:
+                type: number
+                minimum: 0
+
+          dicing:
+            type: object
+            properties:
+              kerfWidthUm:
+                type: number
+                minimum: 0
+
+              sawStreetXUm:
+                type: number
+                minimum: 0
+
+              sawStreetYUm:
+                type: number
+                minimum: 0
+
+      opticalInterfaces:
+        type: object
+        required:
+          - ports
+
+        properties:
+
+          ports:
+            type: array
+            items:
+              type: object
+              required:
+                - name
+                - side
+                - positionUm
+                - angleDeg
+
+              properties:
+                name:
+                  type: string
+
+                side:
+                  type: string
+                  enum:
+                    - north
+                    - south
+                    - east
+                    - west
+
+                positionUm:
+                  type: object
+                  required:
+                    - x
+                    - y
+                  properties:
+                    x:
+                      type: number
+                    y:
+                      type: number
+
+                angleDeg:
+                  type: number
+
+                modeFieldDiameterUm:
+                  type: number
+                  minimum: 0
+
+                polarization:
+                  type: string
+
+                wavelengthRangeNm:
+                  type: array
+                  minItems: 2
+                  maxItems: 2
+                  items:
+                    type: number
+
+                insertionLossDb:
+                  type: number
+
+                returnLossDb:
+                  type: number
+
+          portMatchingRules:
+            type: array
+            items:
+              type: object
+              required:
+                - localPort
+                - remotePort
+                - condition
+
+              properties:
+                localPort:
+                  type: string
+
+                remotePort:
+                  type: string
+
+                condition:
+                  type: string
+
+                offsetToleranceNm:
+                  type: number
+                  minimum: 0
+
+                angleToleranceDeg:
+                  type: number
+                  minimum: 0
+
+      electricalInterfaces:
+        type: object
+        properties:
+
+          ports:
+            type: array
+            items:
+              type: object
+              required:
+                - name
+                - side
+                - positionUm
+
+              properties:
+                name:
+                  type: string
+
+                side:
+                  type: string
+
+                positionUm:
+                  type: object
+                  required:
+                    - x
+                    - y
+                  properties:
+                    x:
+                      type: number
+                    y:
+                      type: number
+
+                voltageNominalV:
+                  type: number
+
+                currentMaxMa:
+                  type: number
+                  minimum: 0
+
+                padSizeUm:
+                  type: object
+                  properties:
+                    width:
+                      type: number
+                      minimum: 0
+                    height:
+                      type: number
+                      minimum: 0
+
+      content:
+        type: object
+        properties:
+
+          subComponents:
+            type: array
+            items:
+              type: object
+              required:
+                - ref
+                - component
+                - placement
+
+              properties:
+                ref:
+                  type: string
+
+                component:
+                  type: string
+
+                parameters:
+                  type: object
+
+                placement:
+                  type: object
+                  required:
+                    - xUm
+                    - yUm
+                    - angleDeg
+
+                  properties:
+                    xUm:
+                      type: number
+                    yUm:
+                      type: number
+                    angleDeg:
+                      type: number
+
+          internalConnections:
+            type: array
+            items:
+              type: object
+              required:
+                - from
+                - to
+                - type
+
+              properties:
+                from:
+                  type: string
+
+                to:
+                  type: string
+
+                type:
+                  type: string
+
+      replication:
+        type: object
+        required:
+          - allowedAxes
+
+        properties:
+
+          allowedAxes:
+            type: array
+            items:
+              type: string
+              enum:
+                - X
+                - Y
+
+          maxCountX:
+            type: integer
+            minimum: 0
+
+          maxCountY:
+            type: integer
+            minimum: 0
+
+          maxTotalInstances:
+            type: integer
+            minimum: 0
+
+          adjacencyRules:
+            type: array
+            items:
+              type: object
+              required:
+                - rule
+                - description
+
+              properties:
+                rule:
+                  type: string
+
+                description:
+                  type: string
+
+                maxPowerMw:
+                  type: number
+                  minimum: 0
+
+          spareUnitPolicy:
+            type: object
+            properties:
+              enabled:
+                type: boolean
+
+              spareRatio:
+                type: number
+                minimum: 0
+                maximum: 1
+
+              description:
+                type: string
+
+          edgeHandling:
+            type: object
+            properties:
+              partialTilesAllowed:
+                type: boolean
+
+              edgeTerminationComponent:
+                type: string
+
+      performance:
+        type: object
+        properties:
+
+          insertionLossDb:
+            type: number
+
+          crosstalkDb:
+            type: number
+
+          powerConsumptionMw:
+            type: number
+            minimum: 0
+
+          operatingTemperatureC:
+            type: array
+            minItems: 2
+            maxItems: 2
+            items:
+              type: number
+
+          wavelengthRangeNm:
+            type: array
+            minItems: 2
+            maxItems: 2
+            items:
+              type: number
+
+          bandwidthGhz:
+            type: number
+            minimum: 0
+
+          yieldEstimatePercent:
+            type: number
+            minimum: 0
+            maximum: 100
+
+      verification:
+        type: object
+        required:
+          - status
+
+        properties:
+
+          status:
+            type: string
+            enum:
+              - draft
+              - simulated
+              - experimental
+              - verified
+
+          verificationDate:
+            type: string
+
+          processCorners:
+            type: array
+            items:
+              type: string
+
+          simulationData:
+            type: object
+            properties:
+              sParametersFile:
+                type: string
+
+              eyeDiagramFile:
+                type: string
+
+              thermalMapFile:
+                type: string
+
+          drcClean:
+            type: boolean
+
+          lvsClean:
+            type: boolean
+
+          testStructures:
+            type: array
+            items:
+              type: string
+
+      metadata:
+        type: object
+        required:
+          - createdBy
+          - createdDate
+
+        properties:
+
+          createdBy:
+            type: string
+
+          createdDate:
+            type: string
+
+          lastModified:
+            type: string
+
+          license:
+            type: string
+
+          repository:
+            type: string
+
+          documentation:
+            type: string
+
+          contact:
+            type: string
