@@ -3,11 +3,9 @@ $id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/ru/ru.schema.yaml"
 
 title: "EIS-VLPI Replicable Unit Schema"
 description: >
-  Machine-readable schema for Replicable Units (RUs) in the
-  Earth ICT, SPC Very Large Photonic Infrastructure (VLPI) PDK.
-  An RU is a parameterized, tileable physical-computation unit
-  that may be instantiated and composed at wafer scale.
-
+  Machine-readable schema for an EIS-VLPI Replicable Unit (RU).
+  The RU is a bounded, composable physical transformation with explicit
+  state, interfaces, realization, replication, verification, and provenance.
 type: object
 
 required:
@@ -412,6 +410,10 @@ properties:
                 type: string
 
       performance:
+        description: >
+          Optional declared targets or measured metrics. Values must be
+          accompanied by evidence status and must not be interpreted as
+          demonstrated merely because they are present.
         type: object
         properties:
 
@@ -448,48 +450,62 @@ properties:
             minimum: 0
             maximum: 100
 
+      transformation:
+        type: object
+        properties:
+          stateModel:
+            type: string
+          mapping:
+            type: string
+          physicalMechanism:
+            type: string
+          constraintReductionRef:
+            type: string
+          contractRef:
+            type: string
+          stateBoundaryRef:
+            type: string
+          regenerationRef:
+            type: string
+
       verification:
         type: object
         required:
           - status
-
         properties:
-
           status:
             type: string
             enum:
               - draft
-              - simulated
-              - experimental
-              - verified
-
-          verificationDate:
+              - specified
+              - formally-verified
+              - computationally-demonstrated
+              - experimentally-demonstrated
+              - measured
+              - proposed-hypothesis
+              - derived-metric
+          contractRef:
             type: string
-
-          processCorners:
+          evidenceRefs:
             type: array
             items:
               type: string
-
-          simulationData:
-            type: object
-            properties:
-              sParametersFile:
-                type: string
-
-              eyeDiagramFile:
-                type: string
-
-              thermalMapFile:
-                type: string
-
-          drcClean:
-            type: boolean
-
-          lvsClean:
-            type: boolean
-
-          testStructures:
+          pdrRef:
+            type: string
+          pctRef:
+            type: string
+          ptvRef:
+            type: string
+          bistRef:
+            type: string
+          foundryReview:
+            type: string
+            enum:
+              - not-requested
+              - requested
+              - accepted
+              - rejected
+          limitations:
             type: array
             items:
               type: string
@@ -513,6 +529,17 @@ properties:
 
           license:
             type: string
+          evidenceStatus:
+            type: string
+            enum:
+              - draft
+              - specified
+              - formally-verified
+              - computationally-demonstrated
+              - experimentally-demonstrated
+              - measured
+              - proposed-hypothesis
+              - derived-metric
 
           repository:
             type: string
