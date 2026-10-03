@@ -1,294 +1,452 @@
-</> Markdown
-# 🌍 EIS Open VLPI PDK
-# eis-open-vlpi-pdk
-Open, parameterized photonic design infrastructure with Replicable Units (RUs), CRC contracts, PVR verification, and OASIS generation.
-# 🌍 EIS Open VLPI PDK
+# EIS Open VLPI PDK
 
-**Earth ICT, SPC — Open physical-design infrastructure for Very Large Photonic Integration (VLPI)**
+**Earth ICT, SPC — Open enabling technical disclosure for Very Large Photonic Infrastructure (VLPI)**
 
-[![Status: Draft](https://img.shields.io/badge/Status-Draft-orange.svg)]()
-[![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0--draft-green.svg)]()
-[![Schema: JSON](https://img.shields.io/badge/Schema-JSON%20Schema-blue.svg)]()
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+> **Here is the architecture. Here are the contracts. Here are the interfaces. Here are the implementation rules. Here is the verification path. Here is the physical artifact. Make your own.**
 
-> **Open physical-computing infrastructure for Earth-first ICT.**
+This repository is the open technical-disclosure layer of the Earth ICT, SPC (EIS) VLPI project.
 
-Earth ICT, SPC (EIS) is developing an open design and verification framework for very large photonic computing infrastructure — from **Replicable Units (RUs)** and physical transformation contracts through photonic design verification, OASIS realization, fabrication, and measured evidence.
+It is deliberately organized differently from a research article. The **Research Article** records scientific questions, evidence, results, interpretation, and limits. This repository is intended to provide an **enabling technical disclosure** from which a technically skilled person can understand, reproduce, adapt, and independently implement compatible physical-computation systems.
 
-This repository is the open ecosystem layer.
+It is not itself a patent and does not provide legal advice.
 
----
+## What is being disclosed?
 
-## 📖 Table of Contents
+EIS is developing an open framework for physical computation in which the primary object is a **Replicable Unit (RU)**: a bounded, composable physical transformation with an explicit state model, contract, physical realization, verification path, and replication evidence.
 
-* [Overview](#-overview)
-* [Why VLPI](#-why-vlpi)
-* [The Replicable Unit](#-the-replicable-unit)
-* [RU Contract](#-ru-contract)
-* [From Physics to Fabrication](#-from-physics-to-fabrication)
-* [Evidence and Verification](#-evidence-and-verification)
-* [Repository Structure](#-repository-structure)
-* [Current Scope: v0.1](#-current-scope-v01)
-* [Quick Start](#-quick-start)
-* [Schema](#-schema)
-* [Reference Technology](#-reference-technology)
-* [RU-001 and RU-002](#-ru-001-and-ru-002)
-* [Physical Design and OASIS](#-physical-design-and-oasis)
-* [Open / Controlled / Verified Boundaries](#-open--controlled--verified-boundaries)
-* [Roadmap](#-roadmap)
-* [Contributing](#-contributing)
-* [License](#-license)
-* [Acknowledgments](#-acknowledgments)
-* [Contact](#-contact)
+The central working abstraction is:
 
----
-
-# 🌺 Overview
-
-Conventional electronic and photonic design flows generally begin with components, cells, or circuits and then assemble increasingly large systems.
-
-EIS is exploring a different abstraction for very large physical computation:
-
-> **Define the physical transformation first. Define the state it operates on. Define the contract that makes the transformation composable. Then realize, verify, fabricate, and measure it.**
-
-The EIS Open VLPI PDK provides the open schemas, contracts, reference models, verification interfaces, and tooling needed to express that approach.
-
-The project is intended to support:
-
-* **Replicable Units (RUs)**
-* physical transformation contracts
-* **Constraint Reduction Calculus (CRC)**
-* parameterized photonic primitives
-* physical-design verification
-* PVR: Photonic Verification and Realization
-* PDR: Photonic Design-Rule Verification
-* PCT: Photonic Connectivity and Topology Verification
-* PTV: Physical Transformation Verification
-* OASIS physical-design output
-* Paper2Agent-to-layout workflows
-* foundry-specific realization through controlled adapters
-* post-fabrication BIST and measured evidence
-* wafer-scale and stacked-wafer composition
-* open multi-foundry ecosystem development
-
-The goal is **not** to prescribe one photonic architecture or one foundry process.
-
-The goal is to establish an open language in which independently developed physical transformations can become **composable, reproducible, verifiable infrastructure**.
-
----
-
-# 🌎 Why VLPI?
-
-Photonic integration is often discussed in terms of individual devices, PICs, optical links, or photonic accelerators.
-
-VLPI asks a larger question:
-
-> **What happens when photonic computation is treated as infrastructure rather than as a collection of individual photonic chips?**
-
-At sufficient scale, the design problem includes:
-
-* physical transformation
-* state representation
-* optical connectivity
-* replication
-* thermal behavior
-* electrical interfaces
-* fabrication constraints
-* verification
-* measurement
-* yield
-* packaging
-* wafer-scale composition
-* stacked-wafer composition
-* useful computational service
-
-EIS therefore treats the physical design artifact as part of a larger evidence chain:
-
-```text
-Physical hypothesis
-        ↓
-Physical state
-        ↓
-RU contract
-        ↓
-Candidate transformation
-        ↓
-CRC constraint reduction
-        ↓
-Physics simulation
-        ↓
-PDK-constrained realization
-        ↓
-PVR
-        ↓
-OASIS
-        ↓
-Foundry review
-        ↓
-Fabrication
-        ↓
-BIST / State Boundary measurement
-        ↓
-Replication evidence
-        ↓
-Useful computational service
-```
-
-This repository concentrates on the **open infrastructure required to make that chain machine-readable and reproducible**.
-
----
-
-# 🔁 The Replicable Unit
-
-The **Replicable Unit (RU)** is a foundational abstraction of the EIS-VLPI architecture.
-
-However, an RU is **not simply a photonic standard cell**.
-
-An RU is defined by the physical transformation it performs, the state it operates upon, the conditions under which that transformation is accepted, and the evidence supporting its realization.
-
-An RU can therefore be understood as:
-
-> **A bounded, composable physical computation whose transformation, state, contract, realization, verification, and replication evidence are explicitly represented.**
-
-The RU abstraction separates:
-
-1. **What physical transformation is required**
-2. **What physical state enters and leaves**
-3. **What constraints must be satisfied**
-4. **How the transformation is realized**
-5. **What evidence supports the realization**
-6. **How the unit may be composed and replicated**
-
----
-
-## RU Definition → Instance → Composition
-
-The earlier three-level concept remains useful, but EIS treats it as part of a larger contract/evidence model.
-
-```text
-                 RU Definition
-          (transformation + state + contract)
-                         │
-                         │ instantiate
-                         ▼
-                    RU Instance
-          (specific physical realization)
-                         │
-                         │ compose
-                         ▼
-                  RU Composition
-        (verified physical transformations)
-                         │
-                         ▼
-                Wafer / Stack / VLPI
-```
-
-The geometry of an RU is therefore **not universally fixed**.
-
-A particular RU may occupy 500 × 500 µm, 1 × 1 mm, or another bounded physical region depending on the technology and transformation.
-
-Geometry is an implementation property.
-
-The **contract is the invariant**.
-
----
-
-# 🧮 RU Contract
-
-The current EIS working abstraction is:
-
-$$
-\boxed{
+[
 S_{RU}=(H,T,R,B,G,C)
-}
-$$
+]
 
 where:
 
-| Symbol | Meaning                         |
-| ------ | ------------------------------- |
-| **H**  | Physical field/state space      |
-| **T**  | Physical Transformation Mapping |
-| **R**  | Constraint Reduction operator   |
-| **B**  | State-Boundary acceptance       |
-| **G**  | State-to-field regeneration     |
-| **C**  | Machine-checkable contract      |
+- **H** — physical field/state space
+- **T** — physical transformation mapping
+- **R** — constraint-reduction operator
+- **B** — state-boundary acceptance
+- **G** — state-to-field regeneration
+- **C** — machine-checkable contract
 
-This model deliberately avoids assuming that photonic computation is inherently a conventional matrix multiply, Boolean gate, or electronic MAC.
+The abstraction does not assume that photonic computation is inherently a Boolean gate, electronic MAC, or conventional matrix-vector operation.
 
-A photonic RU may exploit the physical behavior already present in the device — including interference, field superposition, resonance, phase, amplitude, propagation, coupling, or other physical transformations.
+## The "make your own" principle
 
-The abstraction begins with the **physical transformation**, not with an imposed electronic computing metaphor.
+The repository is intended to support independent implementation.
 
----
+An implementation may use a different foundry, material stack, simulator, packaging technology, or toolchain, provided that it satisfies the published contracts and interfaces.
 
-# 🧠 Constraint Reduction Calculus
+The open repository therefore separates:
 
-EIS uses **Constraint Reduction Calculus (CRC)** as a framework for reducing the physical search space before expensive physics simulation.
+- **architecture and contracts** — openly disclosed;
+- **technology interfaces** — openly specified;
+- **reference implementations** — openly reproducible where possible;
+- **controlled technology** — proprietary PDKs, process rules, models, credentials, and other material that EIS is not authorized to publish.
 
-The objective is not to replace physics simulation.
+The objective is not to create a black-box EIS chip.
 
-It is to ask:
+The objective is to create an **open physical-computation architecture that others can implement**.
 
-> **Can physical constraints eliminate unsuitable candidates before full-wave computation is required?**
+## GitHub versus the Research Article
+
+### Research Article
+
+The Research Article asks:
+
+> **What do we know, what did we demonstrate, and what remains a hypothesis?**
+
+It is evidence-led scientific communication.
+
+### This repository
+
+This repository asks:
+
+> **What would someone skilled in the art and science need in order to make an independent implementation?**
+
+It therefore emphasizes:
+
+- definitions;
+- contracts;
+- interfaces;
+- schemas;
+- implementation rules;
+- verification;
+- physical-design artifacts;
+- test vectors;
+- evidence manifests;
+- reproducibility.
+
+A repository artifact does not become experimentally demonstrated merely because it is published.
+
+## From physical principle to infrastructure
+
+The intended disclosure chain is:
+
+```text
+Physical principle
+      ↓
+Physical state
+      ↓
+Transformation
+      ↓
+RU contract
+      ↓
+Physical primitives
+      ↓
+Composition
+      ↓
+Technology mapping
+      ↓
+CRC
+      ↓
+Physics simulation
+      ↓
+PVR
+ ├── PDR
+ ├── PCT
+ └── PTV
+      ↓
+OASIS
+      ↓
+Foundry review
+      ↓
+Fabrication
+      ↓
+BIST / State Boundary measurement
+      ↓
+Replication
+      ↓
+Useful computational service
+      ↓
+VLPI
+```
+
+The physical artifact is therefore part of the evidence chain, not merely a downstream drawing.
+
+## Why VLPI?
+
+EIS asks a system-level question:
+
+> **Can physical computation and physical information movement be co-designed as one scalable, verifiable photonic infrastructure?**
+
+The project is not simply about putting an optical bus around an otherwise electronic accelerator.
+
+EIS is investigating whether some computational state can remain within a photonic physical substrate while it is transformed, selected, routed, and communicated, thereby reducing unnecessary electronic state-boundary crossings.
+
+At larger scale, this makes the following first-class engineering concerns:
+
+- physical transformation;
+- optical information movement;
+- state preservation;
+- state boundaries;
+- replication;
+- thermal behavior;
+- electrical interfaces;
+- packaging;
+- fabrication;
+- verification;
+- measurement;
+- yield;
+- wafer-scale composition;
+- stacked-wafer composition.
+
+## Replicable Units
+
+An RU is **not merely a photonic standard cell**.
+
+An RU is defined by the physical transformation it performs, the state on which it operates, the contract that accepts that transformation, its realization, and the evidence supporting it.
 
 Conceptually:
 
 ```text
-Design space
-     │
-     ▼
-CRC constraints
-     │
-     ├── reject impossible candidates
-     │
-     ├── reject contract-incompatible candidates
-     │
-     └── retain physically plausible candidates
-                     │
-                     ▼
-                EM / FDTD
-                     │
-                     ▼
-              physical evidence
+                 RU Definition
+       transformation + state + contract
+                       │
+                       ▼
+                  RU Instance
+            specific realization
+                       │
+                       ▼
+                 RU Composition
+                       │
+                       ▼
+                Wafer / Stack / VLPI
 ```
 
-A central research metric is:
+Geometry is an implementation property.
 
-$$
-\eta_{CRC}
+The contract is the invariant.
+
+## Constraint Reduction Calculus
+
+**Constraint Reduction Calculus (CRC)** is used to reduce the physical search space before expensive physics simulation.
+
+The objective is not to replace physics simulation.
+
+It is to test whether unsuitable candidates can be rejected earlier:
+
+```text
+Design space
+     ↓
+CRC constraints
+     ├── reject impossible candidates
+     ├── reject contract-incompatible candidates
+     └── retain plausible candidates
+                  ↓
+               EM/FDTD
+                  ↓
+           physical evidence
+```
+
+A central metric is:
+
+[
+eta_{CRC}=1-rac{N_{FDTD,CRC}}{N_{FDTD,baseline}}
+]
+
+Solution-quality preservation is evaluated separately.
+
+## Evidence discipline
+
+EIS distinguishes evidence states rather than treating all repository artifacts as equivalent.
+
+| State | Meaning |
+|---|---|
+| `draft` | Incomplete or exploratory material |
+| `specified` | Behavior and acceptance conditions explicitly defined |
+| `formally-verified` | Logical property machine-checked under stated assumptions |
+| `computationally-demonstrated` | Supported by a documented computational experiment |
+| `experimentally-demonstrated` | Supported by physical experimental demonstration |
+| `measured` | Measurement record exists for the identified artifact and condition |
+| `proposed-hypothesis` | Research hypothesis or design target not yet demonstrated |
+| `derived-metric` | Metric/framework derived from defined inputs |
+
+**Formal verification is not fabrication. Simulation is not measurement. A design target is not a result.**
+
+Failure is also useful disclosure when the input, assumptions, toolchain, result, and failure mode are recorded.
+
+## Open / Controlled / Verified
+
+### Open
+
+Examples:
+
+- schemas;
+- contracts;
+- architecture;
+- reference algorithms;
+- non-proprietary primitives;
+- verification methodology;
+- evidence schemas;
+- reproducibility tooling;
+- public physical artifacts.
+
+### Controlled
+
+Examples:
+
+- NDA foundry PDK contents;
+- proprietary process rules;
+- proprietary compact models;
+- credentials;
+- private simulation environments;
+- pre-release fabrication artifacts;
+- confidential packaging information.
+
+The open repository describes the interface to controlled technology without reproducing controlled contents.
+
+### Verified
+
+Evidence produced by an identified verification or measurement process.
+
+A file existing in GitHub is not, by itself, physical verification.
+
+## Schema foundation
+
+The repository is schema-first.
+
+```text
+schema/
+├── ru/
+│   └── ru.schema.yaml
+├── contract/
+│   └── contract.schema.yaml
+├── evidence/
+│   └── evidence.schema.yaml
+└── design-context/
+    └── design-context.schema.yaml
+```
+
+**DesignContext** is the integration boundary for heterogeneous physical systems, including:
+
+- photonic PDK identity;
+- electronic PDK identity;
+- electro-photonic interface;
+- package/carrier context;
+- optical interfaces;
+- RF/electrical constraints;
+- thermal constraints;
+- verification context.
+
+## RU-001 and RU-002
+
+### RU-001
+
+RU-001 is the first reference physical transformation unit used to establish the EIS RU/contract/PVR/evidence architecture.
+
+Its implementation status must be read from its machine-readable contract and evidence artifacts rather than inferred from diagrams or prose.
+
+### RU-002
+
+RU-002 is the candidate heterogeneous optical-computation unit for the current EIS LLM architecture.
+
+The working transformation composition is:
+
+[
+T_{RU-002}
 =
-1-
-\frac{N_{FDTD,CRC}}
-     {N_{FDTD,baseline}}
-$$
+T_{attention}
+circ
+T_{select}
+circ
+T_{KKA-cache}
+]
 
-with preservation of solution quality evaluated separately.
+with a state progression conceptually represented as:
 
-CRC is therefore an **optimization and search-space reduction hypothesis**, not a substitute for physical validation.
+[
+H_{QKV}ightarrow H_{similarity}ightarrow H_{selected}ightarrow H_{attention}.
+]
+
+A central research question is:
+
+> **Can optical similarity states be ranked, selected, and routed without first becoming electronic data?**
+
+This is a research hypothesis, not a claim that photonic top-k or fully optical attention has already been experimentally demonstrated by EIS.
+
+## Physical design and OASIS
+
+The intended realization path is:
+
+```text
+RU contract
+   ↓
+technology mapping
+   ↓
+physical layout
+   ↓
+PVR
+   ↓
+OASIS
+   ↓
+foundry review
+   ↓
+fabrication
+   ↓
+BIST
+```
+
+An image of a layout is explanatory.
+
+Where publication is permitted, the machine-readable OASIS artifact is the physical-design disclosure.
+
+## Independent implementation
+
+An independent implementation should be able to follow:
+
+```text
+1. Select an appropriate technology
+2. Instantiate an RU contract
+3. Select physical primitives
+4. Map primitives to the technology
+5. Apply CRC
+6. Run physics simulation
+7. Run PVR
+8. Generate a physical artifact
+9. Generate an evidence manifest
+10. Fabricate through the appropriate controlled process
+11. Measure / run BIST
+12. Compare evidence with the contract
+```
+
+Where proprietary tools or PDKs are required, the repository should identify the controlled boundary rather than pretending that proprietary material is open.
+
+## Repository structure
+
+The repository will grow toward:
+
+```text
+eis-open-vlpi-pdk/
+├── README.md
+├── LICENSE
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── docs/
+│   ├── 00-overview/
+│   ├── 01-architecture/
+│   ├── 02-physical-transformations/
+│   ├── 03-replicable-units/
+│   ├── 04-crc/
+│   ├── 05-pvr/
+│   ├── 06-bist/
+│   ├── 07-packaging/
+│   ├── 08-vlpi/
+│   └── 09-reproduction/
+├── schema/
+│   ├── ru/
+│   ├── contract/
+│   ├── evidence/
+│   └── design-context/
+├── technology/
+│   ├── reference/
+│   └── adapters/
+├── primitives/
+├── ru/
+│   ├── RU-001/
+│   └── RU-002/
+├── verification/
+│   ├── PDR/
+│   ├── PCT/
+│   └── PTV/
+├── agents/
+├── examples/
+└── tests/
+```
+
+## Contribution standard
+
+A contribution is complete when another technically skilled person can understand:
+
+1. what was done;
+2. why it was done;
+3. what assumptions were made;
+4. what technology was used;
+5. what evidence exists;
+6. what remains unverified;
+7. how to reproduce or independently implement it.
+
+EIS does not seek a single universal verification tool.
+
+It seeks a formally explicit evidence chain in which domain-specific tools produce domain-specific evidence and higher-level contracts establish the logical relationship among those evidence records.
+
+## Disclosure doctrine
+
+The repository's governing document is:
+
+[`docs/00-overview/EIS_Open_VLPI_Disclosure_Doctrine.md`](docs/00-overview/EIS_Open_VLPI_Disclosure_Doctrine.md)
+
+Read that document before treating repository contents as a complete implementation specification.
+
+## Status
+
+This is an evolving open technical disclosure.
+
+It should be read together with the evidence state attached to each artifact.
+
+**Do not infer fabrication, foundry acceptance, measured performance, or infrastructure-scale validation from an architecture diagram, schema, simulation, or design target.**
 
 ---
 
-# 🔬 Evidence and Verification
-
-EIS distinguishes different kinds of evidence.
-
-A schema or Lean proof can establish that a logical contract is internally consistent.
-
-It does **not** establish that a fabricated photonic device physically works.
-
-Accordingly, EIS uses explicit evidence states.
-
-| Evidence state                 | Meaning                                           |
-| ------------------------------ | ------------------------------------------------- |
-| `draft`                        | Concept or incomplete definition                  |
-| `specified`                    | Contract and required behavior formally specified |
-| `computationally-demonstrated` | Supported by computational experiment             |
-| `experimentally-demonstrated`  | Supported by experimental demonstration           |
-| `measur                        |                                                   |
-</> Markdown
-**Earth ICT, SPC**
-
+**Earth ICT, SPC (EIS)**  
 *Open physical-computing infrastructure for an Earth-first ICT future.*
-
-🌍 **A hui hou.**
