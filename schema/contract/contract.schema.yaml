@@ -1,0 +1,141 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/contract/contract.schema.yaml"
+title: "EIS-VLPI Physical Transformation Contract Schema"
+description: >-
+  Machine-readable contract for accepting a physical transformation
+  performed by an EIS-VLPI Replicable Unit.
+type: object
+required: [contract]
+properties:
+  contract:
+    type: object
+    required: [identity, state, transformation, acceptance, evidencePolicy]
+    properties:
+      identity:
+        type: object
+        required: [name, version, ruRef]
+        properties:
+          name: {type: string}
+          version: {type: string}
+          ruRef: {type: string}
+          description: {type: string}
+          status:
+            type: string
+            enum: [draft, specified, formally-verified, computationally-demonstrated, experimentally-demonstrated, measured, proposed-hypothesis]
+      state:
+        type: object
+        required: [input, output]
+        properties:
+          input:
+            type: object
+            required: [space]
+            properties:
+              space: {type: string}
+              representation: {type: string}
+              parameters: {type: object}
+          output:
+            type: object
+            required: [space]
+            properties:
+              space: {type: string}
+              representation: {type: string}
+              parameters: {type: object}
+          retainedStateAllowed: {type: boolean}
+      transformation:
+        type: object
+        required: [mapping]
+        properties:
+          mapping: {type: string}
+          physicalMechanism: {type: string}
+          parameters: {type: object}
+          composition:
+            type: array
+            items: {type: string}
+      constraintReduction:
+        type: object
+        properties:
+          operator: {type: string}
+          constraints:
+            type: array
+            items:
+              type: object
+              required: [name, condition]
+              properties:
+                name: {type: string}
+                condition: {type: string}
+                severity:
+                  type: string
+                  enum: [required, preferred, informational]
+      stateBoundary:
+        type: object
+        required: [acceptance]
+        properties:
+          acceptance: {type: string}
+          measurementRequired: {type: boolean}
+          representation: {type: string}
+          trigger: {type: string}
+      regeneration:
+        type: object
+        properties:
+          required: {type: boolean}
+          mapping: {type: string}
+          conditions: {type: object}
+      limits:
+        type: object
+        properties:
+          optical: {type: object, additionalProperties: true}
+          electrical: {type: object, additionalProperties: true}
+          thermal: {type: object, additionalProperties: true}
+          timing: {type: object, additionalProperties: true}
+          physical: {type: object, additionalProperties: true}
+      acceptance:
+        type: object
+        required: [conditions]
+        properties:
+          conditions:
+            type: array
+            items:
+              type: object
+              required: [name, condition]
+              properties:
+                name: {type: string}
+                condition: {type: string}
+                metric: {type: string}
+                threshold: {}
+                unit: {type: string}
+                comparison:
+                  type: string
+                  enum: [lt, lte, eq, gte, gt, in, pass]
+          overallRule: {type: string}
+      evidencePolicy:
+        type: object
+        required: [minimumEvidence]
+        properties:
+          minimumEvidence:
+            type: array
+            items:
+              type: string
+              enum: [specification, formal-proof, computational, experimental, measurement]
+          requiredArtifacts:
+            type: array
+            items: {type: string}
+          provenanceRequired: {type: boolean}
+      composition:
+        type: object
+        properties:
+          inputs:
+            type: array
+            items: {type: string}
+          outputs:
+            type: array
+            items: {type: string}
+          compatibilityRules:
+            type: array
+            items: {type: string}
+      provenance:
+        type: object
+        properties:
+          sourceCommit: {type: string}
+          sourceArtifact: {type: string}
+          generatedBy: {type: string}
+          generatedAt: {type: string}
