@@ -1,0 +1,114 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/evidence/evidence.schema.yaml"
+title: "EIS-VLPI Evidence Manifest Schema"
+description: >-
+  Machine-readable provenance and evidence record for EIS-VLPI artifacts,
+  experiments, verification results, measurements, and failures.
+type: object
+required: [evidence]
+properties:
+  evidence:
+    type: object
+    required: [identity, status, subject, provenance, result]
+    properties:
+      identity:
+        type: object
+        required: [id, version]
+        properties:
+          id: {type: string}
+          version: {type: string}
+          title: {type: string}
+          description: {type: string}
+      status:
+        type: string
+        enum: [draft, specified, formally-verified, computationally-demonstrated, experimentally-demonstrated, measured, proposed-hypothesis, derived-metric]
+      subject:
+        type: object
+        required: [artifactType, artifactRef]
+        properties:
+          artifactType: {type: string}
+          artifactRef: {type: string}
+          ruRef: {type: string}
+          contractRef: {type: string}
+          designContextRef: {type: string}
+      provenance:
+        type: object
+        required: [source]
+        properties:
+          source: {type: string}
+          sourceCommit: {type: string}
+          sourceHash: {type: string}
+          toolchain:
+            type: array
+            items:
+              type: object
+              required: [name, version]
+              properties:
+                name: {type: string}
+                version: {type: string}
+                invocation: {type: string}
+          pdkIdentity: {type: string}
+          generatedAt: {type: string}
+          operator: {type: string}
+      assumptions:
+        type: array
+        items: {type: string}
+      inputs:
+        type: array
+        items:
+          type: object
+          required: [name, ref]
+          properties:
+            name: {type: string}
+            ref: {type: string}
+            hash: {type: string}
+            role: {type: string}
+      result:
+        type: object
+        required: [outcome]
+        properties:
+          outcome:
+            type: string
+            enum: [pass, fail, partial, inconclusive, not-run]
+          summary: {type: string}
+          metrics:
+            type: array
+            items:
+              type: object
+              required: [name, value]
+              properties:
+                name: {type: string}
+                value: {}
+                unit: {type: string}
+                threshold: {}
+                comparison: {type: string}
+          failureModes:
+            type: array
+            items:
+              type: object
+              required: [name, description]
+              properties:
+                name: {type: string}
+                description: {type: string}
+                reproducible: {type: boolean}
+          limitations:
+            type: array
+            items: {type: string}
+      artifacts:
+        type: array
+        items:
+          type: object
+          required: [path]
+          properties:
+            path: {type: string}
+            sha256: {type: string}
+            type: {type: string}
+            description: {type: string}
+      verification:
+        type: object
+        properties:
+          method: {type: string}
+          verifier: {type: string}
+          verifierVersion: {type: string}
+          independentRoundTrip: {type: boolean}
+          humanReviewRequired: {type: boolean}
