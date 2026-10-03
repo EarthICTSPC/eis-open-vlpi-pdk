@@ -1,0 +1,135 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/design-context/design-context.schema.yaml"
+title: "EIS-VLPI DesignContext Schema"
+description: >-
+  Shared machine-readable context binding photonic and electronic technologies,
+  electro-photonic interfaces, package context, constraints, and verification
+  evidence for a physical design artifact.
+type: object
+required: [designContext]
+properties:
+  designContext:
+    type: object
+    required: [identity, technologies, interfaces, verification]
+    properties:
+      identity:
+        type: object
+        required: [name, version]
+        properties:
+          name: {type: string}
+          version: {type: string}
+          description: {type: string}
+          sourceCommit: {type: string}
+      technologies:
+        type: object
+        required: [photonic]
+        properties:
+          photonic:
+            type: object
+            required: [pdkIdentity]
+            properties:
+              pdkIdentity: {type: string}
+              foundry: {type: string}
+              process: {type: string}
+              version: {type: string}
+              controlled: {type: boolean}
+              artifactRef: {type: string}
+          electronic:
+            type: object
+            properties:
+              pdkIdentity: {type: string}
+              foundry: {type: string}
+              process: {type: string}
+              version: {type: string}
+              controlled: {type: boolean}
+              artifactRef: {type: string}
+          packaging:
+            type: object
+            properties:
+              technology: {type: string}
+              provider: {type: string}
+              version: {type: string}
+              controlled: {type: boolean}
+              artifactRef: {type: string}
+      interfaces:
+        type: object
+        properties:
+          electroPhotonic:
+            type: object
+            properties:
+              contractRef: {type: string}
+              connections:
+                type: array
+                items:
+                  type: object
+                  required: [photonicPort, electricalNet]
+                  properties:
+                    photonicPort: {type: string}
+                    electricalNet: {type: string}
+                    direction: {type: string}
+                    physicalCoordinates:
+                      type: object
+                      properties:
+                        xUm: {type: number}
+                        yUm: {type: number}
+                        zUm: {type: number}
+                    pitchUm: {type: number, minimum: 0}
+                    orientationDeg: {type: number}
+                    voltageRangeV:
+                      type: array
+                      minItems: 2
+                      maxItems: 2
+                      items: {type: number}
+                    currentRangeMa:
+                      type: array
+                      minItems: 2
+                      maxItems: 2
+                      items: {type: number}
+                    bandwidthGhz: {type: number, minimum: 0}
+                    impedanceOhm: {type: number, minimum: 0}
+                    timing: {type: string}
+          optical:
+            type: object
+            properties:
+              couplingMethod: {type: string}
+              wavelengthNm: {type: number}
+              alignmentToleranceNm: {type: number, minimum: 0}
+              insertionLossBudgetDb: {type: number}
+          package:
+            type: object
+            properties:
+              packageReference: {type: string}
+              carrierReference: {type: string}
+              interposerReference: {type: string}
+              boardReference: {type: string}
+      constraints:
+        type: object
+        properties:
+          thermal: {type: object, additionalProperties: true}
+          rf: {type: object, additionalProperties: true}
+          optical: {type: object, additionalProperties: true}
+          physical: {type: object, additionalProperties: true}
+      verification:
+        type: object
+        required: [status]
+        properties:
+          status:
+            type: string
+            enum: [draft, specified, computationally-demonstrated, experimentally-demonstrated, measured]
+          pdrRef: {type: string}
+          pctRef: {type: string}
+          ptvRef: {type: string}
+          bistRef: {type: string}
+          evidenceRefs:
+            type: array
+            items: {type: string}
+          foundryReview:
+            type: string
+            enum: [not-requested, requested, accepted, rejected]
+      provenance:
+        type: object
+        properties:
+          createdBy: {type: string}
+          createdAt: {type: string}
+          modifiedAt: {type: string}
+          repository: {type: string}
