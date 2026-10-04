@@ -1,0 +1,18 @@
+name: RU-001 reference model
+
+on:
+  push:
+    branches:
+      - ru-001-reference
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python tests/github2agent-002/test_schema_conformance.py
+      - run: python tests/ru-001/test_reference_model.py
