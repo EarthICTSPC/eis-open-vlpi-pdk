@@ -1,0 +1,58 @@
+$schema: "../../schema/verification/pvr.schema.yaml"
+
+pvr:
+  identity:
+    id: "RU-001-PVR-001"
+    version: "0.1.0"
+    gateType: "pre-physics-physical-realization"
+    description: >-
+      Pre-physics gate that determines whether RU-001 has a coherent,
+      PDK-governed physical realization candidate and may proceed to
+      electromagnetic simulation. Passing this gate does not establish
+      physical correctness or performance.
+  subject:
+    ruRef: "ru/RU-001/ru.yaml"
+    contractRef: "ru/RU-001/contract.yaml"
+    designContextRef: "ru/RU-001/design-context.yaml"
+  inputs:
+    - {name: "RU specification", ref: "ru/RU-001/ru.yaml", required: true, hash: "not-pinned"}
+    - {name: "RU contract", ref: "ru/RU-001/contract.yaml", required: true, hash: "not-pinned"}
+    - {name: "DesignContext", ref: "ru/RU-001/design-context.yaml", required: true, hash: "not-pinned"}
+    - {name: "RU specification evidence", ref: "ru/RU-001/evidence.yaml", required: true, hash: "not-pinned"}
+  gates:
+    - {id: "PVR-PHY-001", name: "Contract closure", status: "pass", requirement: "The RU transformation, state boundary, regeneration conditions, acceptance conditions, and evidence policy are explicitly declared.", evidenceRef: "ru/RU-001/contract.yaml"}
+    - {id: "PVR-PHY-002", name: "DesignContext identity closure", status: "pass", requirement: "The candidate identifies the intended photonic technology boundary without exposing controlled PDK contents.", evidenceRef: "ru/RU-001/design-context.yaml"}
+    - {id: "PVR-PHY-003", name: "Physical topology closure", status: "pass", requirement: "The RU has an explicit component topology and connection graph. RU-001 is treated as a hierarchical physical transformation, not a rectangular computational mesh.", evidenceRef: "ru/RU-001/ru.yaml"}
+    - {id: "PVR-PHY-004", name: "Optical interface closure", status: "pass", requirement: "All declared optical ports have positions, sides, angles, and wavelength windows suitable for subsequent PDK mapping.", evidenceRef: "ru/RU-001/ru.yaml"}
+    - {id: "PVR-PHY-005", name: "State-boundary closure", status: "pass", requirement: "Measurement, acceptance, conversion, and regeneration are attributable to an explicit state boundary.", evidenceRef: "ru/RU-001/contract.yaml"}
+    - {id: "PVR-PHY-006", name: "Controlled-PDK boundary", status: "pass", requirement: "Controlled PDK identity is named, while proprietary process data remains inside the authorized execution environment.", evidenceRef: "ru/RU-001/design-context.yaml"}
+    - {id: "PVR-PHY-007", name: "Evidence-boundary closure", status: "pass", requirement: "The candidate remains specified and no physical validation is represented as complete.", evidenceRef: "ru/RU-001/evidence.yaml"}
+    - {id: "PVR-PHY-008", name: "Physics entry gate", status: "not-run", requirement: "After this pre-physics gate, an authorized physics tool may generate an electromagnetic simulation candidate and associated evidence record.", notes: "This artifact intentionally does not run EM simulation."}
+  evidenceBoundary:
+    currentStatus: "specified"
+    prohibitedPromotions: ["fabricated", "PVR-PASS", "PDR-PASS", "PCT-PASS", "PTV-PASS", "BIST-PASS", "measured-performance", "foundry-accepted"]
+    physicsNotRun: true
+    fabricationNotRun: true
+    measurementNotRun: true
+  disposition:
+    status: "ready-for-physics"
+    nextGate: "RU-001-EM-001"
+    rationale: >-
+      The information model, contract, technology identity, physical topology,
+      interfaces, state boundary, and evidence boundary are sufficiently
+      declared to enter an authorized physics-simulation workflow. This is a
+      readiness decision, not a physical-performance result.
+  orchestration:
+    orchestrator: "EURIA"
+    complianceRules:
+      - "Do not convert H_optical to H_elec unless physically necessary and explicitly justified by the contract."
+      - "Do not promote evidence.result.outcome to physical validation without domain-specific evidence."
+      - "Stop the workflow when a required gate fails."
+      - "Keep controlled PDK contents inside the authorized execution environment."
+      - "Require human authorization before consequential fabrication actions."
+    humanApprovalRequired: true
+  provenance:
+    createdBy: "Earth ICT, SPC"
+    createdAt: "2026-10-04"
+    sourceCommit: "ru-001-pvr-001"
+    repository: "EarthICTSPC/eis-open-vlpi-pdk"

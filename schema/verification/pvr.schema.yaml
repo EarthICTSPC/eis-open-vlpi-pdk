@@ -1,0 +1,94 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/verification/pvr.schema.yaml"
+title: "EIS-VLPI Pre-Physics Physical Realization Gate Schema"
+description: >-
+  Machine-readable gate for determining whether a Replicable Unit has enough
+  contract, DesignContext, topology, interface, and provenance information to
+  enter physics simulation without treating the design as physically verified.
+type: object
+required: [pvr]
+properties:
+  pvr:
+    type: object
+    required: [identity, subject, inputs, gates, evidenceBoundary, disposition, provenance]
+    properties:
+      identity:
+        type: object
+        required: [id, version, gateType]
+        properties:
+          id: {type: string}
+          version: {type: string}
+          gateType:
+            type: string
+            enum: [pre-physics-physical-realization]
+          description: {type: string}
+      subject:
+        type: object
+        required: [ruRef, contractRef, designContextRef]
+        properties:
+          ruRef: {type: string}
+          contractRef: {type: string}
+          designContextRef: {type: string}
+      inputs:
+        type: array
+        items:
+          type: object
+          required: [name, ref, required]
+          properties:
+            name: {type: string}
+            ref: {type: string}
+            required: {type: boolean}
+            hash: {type: string}
+      gates:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          required: [id, name, status, requirement]
+          properties:
+            id: {type: string}
+            name: {type: string}
+            status:
+              type: string
+              enum: [not-run, pass, fail, partial, not-applicable]
+            requirement: {type: string}
+            evidenceRef: {type: string}
+            notes: {type: string}
+      evidenceBoundary:
+        type: object
+        required: [currentStatus, prohibitedPromotions]
+        properties:
+          currentStatus:
+            type: string
+            enum: [specified]
+          prohibitedPromotions:
+            type: array
+            items: {type: string}
+          physicsNotRun: {type: boolean}
+          fabricationNotRun: {type: boolean}
+          measurementNotRun: {type: boolean}
+      disposition:
+        type: object
+        required: [status, nextGate]
+        properties:
+          status:
+            type: string
+            enum: [blocked, ready-for-physics]
+          nextGate: {type: string}
+          rationale: {type: string}
+      orchestration:
+        type: object
+        properties:
+          orchestrator: {type: string}
+          complianceRules:
+            type: array
+            items: {type: string}
+          humanApprovalRequired: {type: boolean}
+      provenance:
+        type: object
+        required: [createdBy, createdAt, sourceCommit]
+        properties:
+          createdBy: {type: string}
+          createdAt: {type: string}
+          sourceCommit: {type: string}
+          repository: {type: string}
