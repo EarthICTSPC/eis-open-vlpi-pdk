@@ -1,0 +1,46 @@
+$schema: "../../schema/evidence/evidence.schema.yaml"
+
+evidence:
+  identity:
+    id: "TINY-EVIDENCE-001"
+    version: "0.1.0"
+    title: "TINY-RU-001 schema traversal evidence"
+    description: "Declares exactly what the fixture establishes and what it does not establish."
+  status: "specified"
+  subject:
+    artifactType: "RU-schema-fixture"
+    artifactRef: "examples/github2agent-001/tiny-ru.yaml"
+    ruRef: "examples/github2agent-001/tiny-ru.yaml"
+    contractRef: "examples/github2agent-001/tiny-contract.yaml"
+    designContextRef: "examples/github2agent-001/tiny-design-context.yaml"
+  provenance:
+    source: "GitHub2Agent-001"
+    sourceCommit: "GitHub2Agent-001"
+    sourceHash: "not-applicable"
+    toolchain: {name: "human-authored", version: "n/a", invocation: "n/a"}
+    pdkIdentity: "example-only"
+    generatedAt: "2026-10-04"
+    operator: "Earth ICT, SPC"
+  assumptions: ["The fixture tests information-model traversal, not physical performance."]
+  inputs:
+    - {name: "RU definition", ref: "examples/github2agent-001/tiny-ru.yaml", hash: "not-pinned", role: "source specification"}
+  result:
+    outcome: "pass"
+    summary: "The fixture is intended to provide resolvable RU, Contract, DesignContext, and Evidence relationships."
+    metrics: []
+    failureModes: []
+    limitations:
+      - "No EM simulation was run."
+      - "No PDR/PCT/PTV was run."
+      - "No fabrication or BIST measurement was performed."
+      - "No physical-performance conclusion is supported."
+  artifacts:
+    - {path: "examples/github2agent-001/tiny-ru.yaml", sha256: "not-pinned", type: "schema-fixture", description: "Tiny RU instance."}
+    - {path: "examples/github2agent-001/tiny-contract.yaml", sha256: "not-pinned", type: "contract", description: "Tiny acceptance contract."}
+    - {path: "examples/github2agent-001/tiny-design-context.yaml", sha256: "not-pinned", type: "design-context", description: "Tiny technology context."}
+  verification:
+    method: "schema traversal"
+    verifier: "GitHub2Agent-001"
+    verifierVersion: "0.1.0"
+    independentRoundTrip: false
+    humanReviewRequired: true

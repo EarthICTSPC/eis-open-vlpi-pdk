@@ -1,0 +1,50 @@
+$schema: "../../schema/ru/ru.schema.yaml"
+
+replicableUnit:
+  identity:
+    name: "TINY-RU-001"
+    uuid: "eis:tiny-ru-001"
+    version: "0.1.0"
+    description: "Minimal two-input physical field-combination unit used to test GitHub2Agent schema traversal."
+    category: "example"
+    tags: ["github2agent", "tiny", "schema-test"]
+  geometry:
+    boundary: {shape: "rectangle", widthUm: 100, heightUm: 50}
+    origin: {xUm: 0, yUm: 0, reference: "local"}
+    tilingGrid: {pitchXUm: 100, pitchYUm: 50}
+  opticalInterfaces:
+    ports:
+      - {name: "in_a", side: "west", positionUm: {x: 0, y: 15}, angleDeg: 0}
+      - {name: "in_b", side: "west", positionUm: {x: 0, y: 35}, angleDeg: 0}
+      - {name: "out_r", side: "east", positionUm: {x: 100, y: 25}, angleDeg: 0}
+  content:
+    subComponents:
+      - ref: "combiner_1"
+        component: "field_combiner"
+        placement: {xUm: 50, yUm: 25, angleDeg: 0}
+    internalConnections:
+      - {from: "in_a", to: "combiner_1.a", type: "optical"}
+      - {from: "in_b", to: "combiner_1.b", type: "optical"}
+      - {from: "combiner_1.r", to: "out_r", type: "optical"}
+  transformation:
+    stateModel: "H_in = pair of optical input fields; H_out = residual field state."
+    mapping: "r = a - b"
+    physicalMechanism: "physical field interference/combination"
+    contractRef: "examples/github2agent-001/tiny-contract.yaml"
+  replication:
+    allowedAxes: ["X", "Y"]
+    maxTotalInstances: 100
+  verification:
+    status: "specified"
+    contractRef: "examples/github2agent-001/tiny-contract.yaml"
+    evidenceRefs: ["examples/github2agent-001/tiny-evidence.yaml"]
+    foundryReview: "not-requested"
+    limitations: ["Example schema fixture only; no fabrication or physical measurement is claimed."]
+  metadata:
+    createdBy: "Earth ICT, SPC"
+    createdDate: "2026-10-04"
+    lastModified: "2026-10-04"
+    license: "Repository license applies."
+    evidenceStatus: "specified"
+    repository: "EarthICTSPC/eis-open-vlpi-pdk"
+    documentation: "docs/00-overview/EIS_Open_VLPI_Disclosure_Doctrine.md"

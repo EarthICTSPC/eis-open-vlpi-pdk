@@ -1,0 +1,50 @@
+$schema: "../../schema/contract/contract.schema.yaml"
+
+contract:
+  identity:
+    name: "TINY-RU-001 Contract"
+    version: "0.1.0"
+    ruRef: "examples/github2agent-001/tiny-ru.yaml"
+    description: "Minimal acceptance contract for the GitHub2Agent schema-traversal fixture."
+    status: "specified"
+  state:
+    input: {space: "H_in", representation: "two optical fields", parameters: ["a", "b"]}
+    output: {space: "H_out", representation: "residual optical field", parameters: ["r"]}
+    retainedStateAllowed: false
+  transformation:
+    mapping: "r = a - b"
+    physicalMechanism: "field interference/combination"
+    parameters: [{name: "relative_phase", unit: "rad"}]
+    composition: {associative: false, commutative: false}
+  constraintReduction:
+    operator: "residual-selection"
+    constraints: ["output is the physical residual state defined by the transformation mapping"]
+  stateBoundary:
+    acceptance: "The resulting physical state is accepted at the output boundary."
+    measurementRequired: false
+    representation: "optical field"
+    trigger: "output port"
+  regeneration: {required: false, mapping: "", conditions: "none"}
+  limits:
+    optical: {wavelengthRangeNm: [1500, 1600]}
+    electrical: {}
+    thermal: {}
+    timing: {}
+    physical: {}
+  acceptance:
+    conditions:
+      - {name: "mapping-defined", condition: "output follows the declared transformation mapping", metric: "contract specification", threshold: "defined", unit: "n/a", comparison: "matches"}
+    overallRule: "All declared conditions must be satisfied."
+  evidencePolicy:
+    minimumEvidence: {specification: true, formalProof: false, computational: false, experimental: false, measurement: false}
+    requiredArtifacts: ["examples/github2agent-001/tiny-ru.yaml"]
+    provenanceRequired: true
+  composition:
+    inputs: ["examples/github2agent-001/tiny-ru.yaml"]
+    outputs: ["examples/github2agent-001/tiny-ru.yaml"]
+    compatibilityRules: ["Input and output state references must remain resolvable."]
+  provenance:
+    sourceCommit: "GitHub2Agent-001"
+    sourceArtifact: "examples/github2agent-001/tiny-ru.yaml"
+    generatedBy: "human-authored fixture"
+    generatedAt: "2026-10-04"
