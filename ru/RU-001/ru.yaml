@@ -1,0 +1,74 @@
+$schema: "../../schema/ru/ru.schema.yaml"
+replicableUnit:
+  identity:
+    name: "RU-001"
+    uuid: "eis:ru-001"
+    version: "0.1.0"
+    description: "Reference Replicable Unit for a 2x2 MZI physical field transformation with an explicit state-boundary and regeneration interface."
+    category: "reference-physical-transformation"
+    tags: ["RU-001", "MZI", "physical-transformation", "state-boundary", "SiN-TFLN"]
+  geometry:
+    boundary: {shape: "rectangle", widthUm: 1000, heightUm: 500}
+    origin: {xUm: 0, yUm: 0, reference: "local"}
+    tilingGrid: {pitchXUm: 1000, pitchYUm: 500}
+  opticalInterfaces:
+    ports:
+      - {name: "in_a", side: "west", positionUm: {x: 0, y: 175}, angleDeg: 0, wavelengthRangeNm: [1500, 1600]}
+      - {name: "in_b", side: "west", positionUm: {x: 0, y: 325}, angleDeg: 0, wavelengthRangeNm: [1500, 1600]}
+      - {name: "out_residual", side: "east", positionUm: {x: 1000, y: 250}, angleDeg: 0, wavelengthRangeNm: [1500, 1600]}
+  electricalInterfaces:
+    ports:
+      - {name: "state_boundary_out", side: "east", positionUm: {x: 950, y: 450}}
+      - {name: "regen_drive", side: "east", positionUm: {x: 900, y: 450}}
+  content:
+    subComponents:
+      - {ref: "mzi_2x2", component: "2x2_MZI", parameters: {role: "field transformation"}, placement: {xUm: 500, yUm: 250, angleDeg: 0}}
+      - {ref: "state_boundary", component: "state-boundary-detector", parameters: {role: "contract acceptance and measurement interface"}, placement: {xUm: 825, yUm: 250, angleDeg: 0}}
+      - {ref: "regenerator", component: "electro-optic-regeneration-interface", parameters: {role: "state-to-field regeneration"}, placement: {xUm: 825, yUm: 400, angleDeg: 0}}
+    internalConnections:
+      - {from: "in_a", to: "mzi_2x2.a", type: "optical"}
+      - {from: "in_b", to: "mzi_2x2.b", type: "optical"}
+      - {from: "mzi_2x2.residual", to: "out_residual", type: "optical"}
+      - {from: "mzi_2x2.residual", to: "state_boundary", type: "optical"}
+      - {from: "state_boundary", to: "regenerator", type: "electrical"}
+      - {from: "regenerator", to: "mzi_2x2.control", type: "electrical"}
+  replication:
+    allowedAxes: ["X", "Y"]
+    maxTotalInstances: 1000000
+    adjacencyRules:
+      - {rule: "optical-port-compatible", description: "Adjacent RU instances must use contract-compatible optical interfaces."}
+      - {rule: "state-boundary-explicit", description: "Any conversion or regeneration boundary must be declared by the composed contract."}
+  transformation:
+    stateModel: "H = encoded optical input fields and resulting optical residual field; an explicit state boundary may measure/accept the physical state and optionally regenerate an optical field."
+    mapping: "F(a,b) = residual field produced by the configured 2x2 MZI interference transformation."
+    physicalMechanism: "coherent optical interference in a 2x2 Mach-Zehnder interferometer with an explicit state-boundary and electro-optic regeneration path."
+    constraintReductionRef: "ru/RU-001/contract.yaml#contract.constraintReduction"
+    contractRef: "ru/RU-001/contract.yaml"
+    stateBoundaryRef: "ru/RU-001/contract.yaml#contract.stateBoundary"
+    regenerationRef: "ru/RU-001/contract.yaml#contract.regeneration"
+  performance:
+    insertionLossDb: 0
+    powerConsumptionMw: 0
+    wavelengthRangeNm: [1500, 1600]
+    bandwidthGhz: 20
+  verification:
+    status: "specified"
+    contractRef: "ru/RU-001/contract.yaml"
+    evidenceRefs: ["ru/RU-001/evidence.yaml"]
+    pdrRef: "not-run"
+    pctRef: "not-run"
+    ptvRef: "not-run"
+    bistRef: "not-run"
+    foundryReview: "not-requested"
+    limitations:
+      - "Geometry and performance fields are reference design targets, not measured results."
+      - "No proprietary PDK contents are included."
+      - "No electromagnetic simulation, fabrication, PVR, BIST, or measured physical performance is claimed by this artifact."
+  metadata:
+    createdBy: "Earth ICT, SPC"
+    createdDate: "2026-10-04"
+    lastModified: "2026-10-04"
+    license: "Repository license applies."
+    evidenceStatus: "specified"
+    repository: "EarthICTSPC/eis-open-vlpi-pdk"
+    documentation: "docs/00-overview/EIS_Open_VLPI_Disclosure_Doctrine.md"
