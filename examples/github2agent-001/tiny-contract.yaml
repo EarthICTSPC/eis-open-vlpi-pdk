@@ -5,26 +5,39 @@ contract:
     name: "TINY-RU-001 Contract"
     version: "0.1.0"
     ruRef: "examples/github2agent-001/tiny-ru.yaml"
-    description: "Minimal acceptance contract for the GitHub2Agent schema-traversal fixture."
+    description: "Minimal acceptance contract for the GitHub2Agent schema-conformance fixture."
     status: "specified"
   state:
-    input: {space: "H_in", representation: "two optical fields", parameters: ["a", "b"]}
-    output: {space: "H_out", representation: "residual optical field", parameters: ["r"]}
+    input:
+      space: "H_in"
+      representation: "two optical fields"
+      parameters: {a: "input field a", b: "input field b"}
+    output:
+      space: "H_out"
+      representation: "residual optical field"
+      parameters: {r: "residual field"}
     retainedStateAllowed: false
   transformation:
     mapping: "r = a - b"
     physicalMechanism: "field interference/combination"
-    parameters: [{name: "relative_phase", unit: "rad"}]
-    composition: {associative: false, commutative: false}
+    parameters:
+      relative_phase: {unit: "rad"}
+    composition: ["non-associative", "non-commutative"]
   constraintReduction:
     operator: "residual-selection"
-    constraints: ["output is the physical residual state defined by the transformation mapping"]
+    constraints:
+      - name: "residual-defined"
+        condition: "output is the physical residual state defined by the transformation mapping"
+        severity: "required"
   stateBoundary:
     acceptance: "The resulting physical state is accepted at the output boundary."
     measurementRequired: false
     representation: "optical field"
     trigger: "output port"
-  regeneration: {required: false, mapping: "", conditions: "none"}
+  regeneration:
+    required: false
+    mapping: ""
+    conditions: {}
   limits:
     optical: {wavelengthRangeNm: [1500, 1600]}
     electrical: {}
@@ -33,10 +46,15 @@ contract:
     physical: {}
   acceptance:
     conditions:
-      - {name: "mapping-defined", condition: "output follows the declared transformation mapping", metric: "contract specification", threshold: "defined", unit: "n/a", comparison: "matches"}
+      - name: "mapping-defined"
+        condition: "output follows the declared transformation mapping"
+        metric: "contract specification"
+        threshold: "defined"
+        unit: "n/a"
+        comparison: "eq"
     overallRule: "All declared conditions must be satisfied."
   evidencePolicy:
-    minimumEvidence: {specification: true, formalProof: false, computational: false, experimental: false, measurement: false}
+    minimumEvidence: ["specification"]
     requiredArtifacts: ["examples/github2agent-001/tiny-ru.yaml"]
     provenanceRequired: true
   composition:
@@ -44,7 +62,7 @@ contract:
     outputs: ["examples/github2agent-001/tiny-ru.yaml"]
     compatibilityRules: ["Input and output state references must remain resolvable."]
   provenance:
-    sourceCommit: "GitHub2Agent-001"
+    sourceCommit: "GitHub2Agent-002"
     sourceArtifact: "examples/github2agent-001/tiny-ru.yaml"
     generatedBy: "human-authored fixture"
     generatedAt: "2026-10-04"
