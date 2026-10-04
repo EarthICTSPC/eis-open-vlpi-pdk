@@ -1,0 +1,63 @@
+$schema: "../../schema/contract/contract.schema.yaml"
+contract:
+  identity:
+    name: "RU-001 Physical Transformation Contract"
+    version: "0.1.0"
+    ruRef: "ru/RU-001/ru.yaml"
+    description: "Acceptance contract for the first EIS reference physical transformation unit."
+    status: "specified"
+  state:
+    input:
+      space: "H"
+      representation: "encoded optical fields"
+      parameters: {wavelength: "operating wavelength", phase: "relative optical phase", amplitude: "input optical amplitude"}
+    output:
+      space: "H"
+      representation: "residual optical field"
+      parameters: {residual: "physical residual field state"}
+    retainedStateAllowed: false
+  transformation:
+    mapping: "F(a,b) = residual field produced by the configured 2x2 MZI interference transformation."
+    physicalMechanism: "coherent optical interference"
+    parameters: {coupler_balance: {unit: "ratio"}, phase_control: {unit: "rad"}}
+    composition: ["field-transformation", "state-boundary", "optional-regeneration"]
+  constraintReduction:
+    operator: "physical-state acceptance"
+    constraints:
+      - {name: "contract-defined-state", condition: "The resulting physical state is accepted only at the declared state boundary.", severity: "required"}
+      - {name: "no-retained-computational-state", condition: "The RU does not retain hidden computational state between transformations.", severity: "required"}
+  stateBoundary:
+    acceptance: "The resulting physical state is accepted at a state boundary satisfying this contract."
+    measurementRequired: true
+    representation: "measured or verified physical state"
+    trigger: "declared state-boundary measurement/verification event"
+  regeneration:
+    required: false
+    mapping: "accepted state may drive an electro-optic regeneration path when required by the composed system contract."
+    conditions: {explicitBoundary: true}
+  limits:
+    optical: {wavelengthRangeNm: [1500, 1600]}
+    electrical: {stateBoundaryBandwidthGhz: 20}
+    thermal: {maximumTemperatureC: 85}
+    timing: {targetCapturePs: 50, targetHoldMs: 1}
+    physical: {maxProbabilityError: 0.000001, targetEnergyPerUsefulTransformationFj: 1}
+  acceptance:
+    conditions:
+      - {name: "capture", condition: "State-boundary capture time meets the declared target.", metric: "t_capture", threshold: 50, unit: "ps", comparison: "lte"}
+      - {name: "hold", condition: "Accepted state remains valid for the declared hold interval.", metric: "t_hold", threshold: 1, unit: "ms", comparison: "gte"}
+      - {name: "probability-error", condition: "Measured or verified probability error does not exceed the declared bound.", metric: "Pe", threshold: 0.000001, unit: "1", comparison: "lte"}
+      - {name: "energy", condition: "Energy per verified useful transformation meets the declared target.", metric: "EU", threshold: 1, unit: "fJ", comparison: "lte"}
+    overallRule: "All required acceptance conditions must be satisfied by evidence at the applicable verification boundary."
+  evidencePolicy:
+    minimumEvidence: ["specification"]
+    requiredArtifacts: ["ru/RU-001/ru.yaml", "ru/RU-001/design-context.yaml", "ru/RU-001/evidence.yaml"]
+    provenanceRequired: true
+  composition:
+    inputs: ["ru/RU-001/ru.yaml"]
+    outputs: ["ru/RU-001/ru.yaml"]
+    compatibilityRules: ["Composition must preserve declared optical state semantics.", "Any electronic conversion must occur only at an explicit state boundary."]
+  provenance:
+    sourceCommit: "RU-001-reference"
+    sourceArtifact: "ru/RU-001/ru.yaml"
+    generatedBy: "Earth ICT, SPC"
+    generatedAt: "2026-10-04"
