@@ -46,11 +46,6 @@ replicableUnit:
     contractRef: "ru/RU-001/contract.yaml"
     stateBoundaryRef: "ru/RU-001/contract.yaml#contract.stateBoundary"
     regenerationRef: "ru/RU-001/contract.yaml#contract.regeneration"
-  performance:
-    insertionLossDb: 0
-    powerConsumptionMw: 0
-    wavelengthRangeNm: [1500, 1600]
-    bandwidthGhz: 20
   verification:
     status: "specified"
     contractRef: "ru/RU-001/contract.yaml"
