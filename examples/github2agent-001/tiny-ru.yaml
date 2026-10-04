@@ -4,8 +4,8 @@ replicableUnit:
   identity:
     name: "TINY-RU-001"
     uuid: "eis:tiny-ru-001"
-    version: "0.1.0"
-    description: "Minimal two-input physical field-combination unit used to test GitHub2Agent schema traversal."
+    version: "0.2.0"
+    description: "Minimal two-input physical field-combination unit used to test GitHub2Agent schema conformance and evidence-gated traversal."
     category: "example"
     tags: ["github2agent", "tiny", "schema-test"]
   geometry:
