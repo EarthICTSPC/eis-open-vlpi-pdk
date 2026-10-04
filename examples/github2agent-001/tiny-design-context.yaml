@@ -3,9 +3,9 @@ $schema: "../../schema/design-context/design-context.schema.yaml"
 designContext:
   identity:
     name: "TINY-RU-001 Design Context"
-    version: "0.1.0"
-    description: "Minimal technology context for schema traversal."
-    sourceCommit: "GitHub2Agent-001"
+    version: "0.2.0"
+    description: "Minimal technology context for schema conformance and reference traversal."
+    sourceCommit: "GitHub2Agent-002"
   technologies:
     photonic:
       pdkIdentity: "example-not-a-foundry-pdk"
@@ -21,11 +21,11 @@ designContext:
         - {photonicPort: "in_a", electricalNet: "none", direction: "input"}
         - {photonicPort: "in_b", electricalNet: "none", direction: "input"}
         - {photonicPort: "out_r", electricalNet: "none", direction: "output"}
-      optical:
-        couplingMethod: "abstract"
-        wavelengthNm: 1550
-        alignmentToleranceNm: 0
-        insertionLossBudgetDb: 0
+    optical:
+      couplingMethod: "abstract"
+      wavelengthNm: 1550
+      alignmentToleranceNm: 0
+      insertionLossBudgetDb: 0
   constraints:
     thermal: {maxTemperatureC: 0}
     rf: {maximumLengthMm: 0}
@@ -41,5 +41,5 @@ designContext:
     evidenceRefs: ["examples/github2agent-001/tiny-evidence.yaml"]
     foundryReview: "not-requested"
   provenance:
-    sourceCommit: "GitHub2Agent-001"
+    sourceCommit: "GitHub2Agent-002"
     generatedAt: "2026-10-04"
