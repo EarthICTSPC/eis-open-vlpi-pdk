@@ -1,0 +1,49 @@
+$schema: "../../schema/evidence/evidence.schema.yaml"
+evidence:
+  identity:
+    id: "RU-001-SPEC-001"
+    version: "0.1.0"
+    title: "RU-001 specification evidence"
+    description: "Evidence manifest establishing the existence and status of the open RU-001 specification artifacts."
+  status: "specified"
+  subject:
+    artifactType: "replicable-unit-specification"
+    artifactRef: "ru/RU-001/ru.yaml"
+    ruRef: "ru/RU-001/ru.yaml"
+    contractRef: "ru/RU-001/contract.yaml"
+    designContextRef: "ru/RU-001/design-context.yaml"
+  provenance:
+    source: "Earth ICT, SPC"
+    sourceCommit: "RU-001-reference"
+    sourceHash: "not-pinned"
+    toolchain: [{name: "YAML", version: "1.2", invocation: "machine-readable specification"}]
+    pdkIdentity: "LIGENTEC_AN800_TFLN"
+    generatedAt: "2026-10-04"
+    operator: "Earth ICT, SPC"
+  assumptions:
+    - "This evidence record establishes specification status only."
+    - "Performance values in the RU and contract are targets unless a later evidence record promotes them."
+  inputs:
+    - {name: "RU specification", ref: "ru/RU-001/ru.yaml", hash: "not-pinned", role: "reference specification"}
+  result:
+    outcome: "not-run"
+    summary: "No physical verification or measurement is asserted by this evidence record."
+    metrics: []
+    failureModes: []
+    limitations:
+      - "No EM simulation was run."
+      - "No PDR/PCT/PTV was run."
+      - "No fabrication was performed."
+      - "No BIST measurement was performed."
+      - "No foundry acceptance is claimed."
+      - "No measured RU-001 performance is established."
+  artifacts:
+    - {path: "ru/RU-001/ru.yaml", sha256: "not-pinned", type: "ru-specification", description: "RU-001 reference specification."}
+    - {path: "ru/RU-001/contract.yaml", sha256: "not-pinned", type: "contract", description: "RU-001 acceptance contract."}
+    - {path: "ru/RU-001/design-context.yaml", sha256: "not-pinned", type: "design-context", description: "RU-001 technology/interface context."}
+  verification:
+    method: "specification and evidence-boundary declaration"
+    verifier: "Earth ICT, SPC"
+    verifierVersion: "0.1.0"
+    independentRoundTrip: false
+    humanReviewRequired: true
