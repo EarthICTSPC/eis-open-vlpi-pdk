@@ -1,0 +1,60 @@
+$schema: "../../schema/design-context/design-context.schema.yaml"
+designContext:
+  identity:
+    name: "RU-001 Reference Design Context"
+    version: "0.1.0"
+    description: "Technology and interface context for the first EIS reference RU. This file exposes technology identity only; it does not publish proprietary PDK contents."
+    sourceCommit: "RU-001-reference"
+  technologies:
+    photonic:
+      pdkIdentity: "LIGENTEC_AN800_TFLN"
+      foundry: "LIGENTEC / X-FAB"
+      process: "SiN with TFLN integration"
+      version: "controlled"
+      controlled: true
+      artifactRef: "ru/RU-001/ru.yaml"
+    electronic:
+      pdkIdentity: "unspecified"
+      foundry: "unspecified"
+      process: "mature-node control/evidence plane"
+      version: "to-be-selected"
+      controlled: false
+      artifactRef: "ru/RU-001/ru.yaml"
+    packaging:
+      technology: "reference packaged test vehicle"
+      provider: "to-be-confirmed"
+      version: "0.1"
+      controlled: false
+      artifactRef: "ru/RU-001/ru.yaml"
+  interfaces:
+    electroPhotonic:
+      contractRef: "ru/RU-001/contract.yaml"
+      connections:
+        - {photonicPort: "out_residual", electricalNet: "state_boundary_out", direction: "output", bandwidthGhz: 20}
+        - {photonicPort: "out_residual", electricalNet: "regen_drive", direction: "output"}
+    optical:
+      couplingMethod: "to-be-confirmed"
+      wavelengthNm: 1550
+      alignmentToleranceNm: 0
+      insertionLossBudgetDb: 0
+    package:
+      packageReference: "RU-001 test vehicle"
+      carrierReference: "to-be-confirmed"
+      boardReference: "to-be-confirmed"
+  constraints:
+    thermal: {maximumTemperatureC: 85}
+    optical: {wavelengthRangeNm: [1500, 1600]}
+    physical:
+      notes: ["PDK-specific geometry and process rules remain controlled.", "Package and coupling details require provider/foundry confirmation."]
+  verification:
+    status: "specified"
+    pdrRef: "not-run"
+    pctRef: "not-run"
+    ptvRef: "not-run"
+    bistRef: "not-run"
+    evidenceRefs: ["ru/RU-001/evidence.yaml"]
+    foundryReview: "not-requested"
+  provenance:
+    createdBy: "Earth ICT, SPC"
+    createdAt: "2026-10-04"
+    repository: "EarthICTSPC/eis-open-vlpi-pdk"
