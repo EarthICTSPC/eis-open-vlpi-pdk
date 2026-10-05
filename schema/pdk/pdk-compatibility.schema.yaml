@@ -1,0 +1,83 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://github.com/EarthICTSPC/eis-open-vlpi-pdk/schema/pdk/pdk-compatibility.schema.yaml"
+title: "EIS VLPI PDK Compatibility Result Schema"
+type: object
+additionalProperties: false
+required: [compatibility]
+properties:
+  compatibility:
+    type: object
+    additionalProperties: false
+    required: [identity, subject, capabilities, gates, disposition, evidence]
+    properties:
+      identity:
+        type: object
+        additionalProperties: false
+        required: [id, pdkId, version, class]
+        properties:
+          id: {type: string}
+          pdkId: {type: string}
+          version: {type: string}
+          class:
+            type: string
+            enum: [external-open-control, eis-reference, hostile-mock, controlled-proprietary]
+      subject:
+        type: object
+        additionalProperties: false
+        required: [ruRef, contractRef, irRef]
+        properties:
+          ruRef: {type: string}
+          contractRef: {type: string}
+          irRef: {type: string}
+      capabilities:
+        type: object
+        additionalProperties: false
+        required: [ruInstantiation, opticalState, physicalTransformation, stateBoundary, regeneration, thermalModel, waferComposition]
+        properties:
+          ruInstantiation: {type: string, enum: [pass, fail, not-run]}
+          opticalState: {type: string, enum: [pass, fail, not-run]}
+          physicalTransformation: {type: string, enum: [pass, fail, not-run]}
+          stateBoundary: {type: string, enum: [pass, fail, not-run]}
+          regeneration: {type: string, enum: [pass, fail, not-run]}
+          thermalModel: {type: string, enum: [pass, fail, not-run]}
+          waferComposition: {type: string, enum: [pass, fail, not-run]}
+      gates:
+        type: object
+        additionalProperties: false
+        required: [PDR, PCT, PTV]
+        properties:
+          PDR: {type: string, enum: [pass, fail, not-run]}
+          PCT: {type: string, enum: [pass, fail, not-run]}
+          PTV: {type: string, enum: [pass, fail, not-run]}
+      failures:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required: [dimension, class, reason]
+          properties:
+            dimension: {type: string}
+            class: {type: string}
+            reason: {type: string}
+      disposition:
+        type: string
+        enum: [compatible, incompatible, partial, not-run]
+      evidence:
+        type: object
+        additionalProperties: false
+        required: [status, physicalValidationRequired, provenanceRequired]
+        properties:
+          status:
+            type: string
+            enum: [specified, computationally-demonstrated, experimentally-demonstrated, measured, proposed-hypothesis, not-run]
+          physicalValidationRequired: {type: boolean}
+          provenanceRequired: {type: boolean}
+          notes: {type: string}
+      provenance:
+        type: object
+        additionalProperties: false
+        properties:
+          experiment: {type: string}
+          sourceCommit: {type: string}
+          generatedBy: {type: string}
+          executedAt: {type: string}

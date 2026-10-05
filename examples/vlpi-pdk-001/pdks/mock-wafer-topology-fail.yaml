@@ -1,0 +1,16 @@
+pdk:
+  id: "MOCK-WAFER-TOPOLOGY-FAIL"
+  version: "0.1.0"
+  class: "hostile-mock"
+  description: "Deterministic negative control: cannot compose the RU under the declared wafer-scale topology constraints."
+  capabilities:
+    ruInstantiation: true
+    opticalState: true
+    physicalTransformation: true
+    stateBoundary: true
+    regeneration: true
+    thermalModel: true
+    waferComposition: false
+    pdr: true
+    pct: false
+    ptv: true

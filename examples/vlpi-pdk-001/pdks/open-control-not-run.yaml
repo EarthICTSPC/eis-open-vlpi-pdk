@@ -1,0 +1,18 @@
+pdk:
+  id: "OPEN-PDK-CONTROL-NOT-RUN"
+  version: "external-not-installed"
+  class: "external-open-control"
+  description: "Control adapter placeholder for a real open photonic PDK. No external PDK execution is claimed by this fixture."
+  capabilities:
+    ruInstantiation: false
+    opticalState: false
+    physicalTransformation: false
+    stateBoundary: false
+    regeneration: false
+    thermalModel: false
+    waferComposition: false
+    pdr: false
+    pct: false
+    ptv: false
+  execution:
+    status: "not-run"

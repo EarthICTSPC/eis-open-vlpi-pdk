@@ -1,0 +1,25 @@
+name: VLPI-PDK-001
+
+on:
+  pull_request:
+    paths:
+      - "verification/pdk/**"
+      - "schema/pdk/**"
+      - "examples/vlpi-pdk-001/**"
+      - "tests/vlpi-pdk-001/**"
+      - ".github/workflows/vlpi-pdk-001.yml"
+  push:
+    branches: ["main", "vlpi-pdk-001"]
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install validation dependencies
+        run: python -m pip install pyyaml jsonschema
+      - name: Run VLPI-PDK-001
+        run: python tests/vlpi-pdk-001/test_pdk_matrix.py
