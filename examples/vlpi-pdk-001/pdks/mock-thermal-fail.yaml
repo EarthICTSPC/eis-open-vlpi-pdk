@@ -1,0 +1,16 @@
+pdk:
+  id: "MOCK-THERMAL-FAIL"
+  version: "0.1.0"
+  class: "hostile-mock"
+  description: "Deterministic negative control: no thermal model adequate for the RU contract."
+  capabilities:
+    ruInstantiation: true
+    opticalState: true
+    physicalTransformation: true
+    stateBoundary: true
+    regeneration: true
+    thermalModel: false
+    waferComposition: true
+    pdr: true
+    pct: true
+    ptv: true
