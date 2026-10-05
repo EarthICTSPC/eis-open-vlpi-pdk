@@ -1,0 +1,53 @@
+experimentInterface:
+  id: "VLPI-PDK-001"
+  version: "0.1.0"
+  title: "Cross-PDK RU Realization Matrix"
+  question: "What must a VLPI PDK provide for an RU-native physical-computation program to be instantiated, composed, verified, and scaled?"
+  controlledInputs:
+    - "examples/vlpi-platform-002/ru001-program.yaml"
+    - "ru/RU-001/ru.yaml"
+    - "ru/RU-001/contract.yaml"
+    - "ru/RU-001/design-context.yaml"
+    - "ru/RU-001/evidence.yaml"
+  environments:
+    - "examples/vlpi-pdk-001/pdks/eis-reference.yaml"
+    - "examples/vlpi-pdk-001/pdks/mock-state-boundary-fail.yaml"
+    - "examples/vlpi-pdk-001/pdks/mock-thermal-fail.yaml"
+    - "examples/vlpi-pdk-001/pdks/mock-wafer-topology-fail.yaml"
+    - "examples/vlpi-pdk-001/pdks/open-control-not-run.yaml"
+  procedure:
+    - "Load the identical VLPI-IR program."
+    - "Resolve RU, Contract, DesignContext, and Evidence."
+    - "Load each PDK capability profile."
+    - "Evaluate capabilities without modifying the controlled input."
+    - "Classify failures by physical/design dimension."
+    - "Validate the compatibility result against its schema."
+    - "Record provenance and evidence status."
+  dimensions:
+    - "ruInstantiation"
+    - "opticalState"
+    - "physicalTransformation"
+    - "stateBoundary"
+    - "regeneration"
+    - "thermalModel"
+    - "waferComposition"
+    - "PDR"
+    - "PCT"
+    - "PTV"
+  expectedBehavior:
+    reference: "compatible"
+    hostileMocks: "deterministic incompatibility"
+    externalOpenPdk: "not-run until actually installed and executed"
+  prohibitedClaims:
+    - "fabricated"
+    - "measured"
+    - "PVR PASS"
+    - "BIST PASS"
+    - "foundry accepted"
+    - "commercial PDK compatible"
+  outputs:
+    human: "docs/pdk/VLPI-PDK-001.md"
+    machineSchema: "schema/pdk/pdk-compatibility.schema.yaml"
+    machineDefinition: "verification/pdk/VLPI-PDK-001.yaml"
+    test: "tests/vlpi-pdk-001/test_pdk_matrix.py"
+  compilerHoldPoint: true
