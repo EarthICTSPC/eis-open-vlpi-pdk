@@ -1,4 +1,3 @@
-$schema: "../../schema/vlpi-ir/vlpi-ir.schema.yaml"
 vlpiIR:
   identity:
     name: "VLPI-IR RU-001 cold-start example"
