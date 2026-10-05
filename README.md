@@ -438,6 +438,22 @@ The repository's governing document is:
 
 Read that document before treating repository contents as a complete implementation specification.
 
+## VLPI-PDK-001 — The compiler hold point
+
+The next major EIS experiment after VLPI-PLATFORM-002 is **VLPI-PDK-001 — Cross-PDK RU Realization Matrix**.
+
+> **EIS is not building an open photonic PDK merely to reproduce conventional PIC design. EIS is building an open, RU-native VLPI PDK as an executable reference model for exploring the physical design space of scalable photonic computation—from Replicable Unit to wafer and beyond.**
+
+VLPI-PDK-001 applies the same RU-001 information model and contract to an EIS Reference VLPI PDK, deliberately constrained mock PDKs, and an external open-PDK control boundary. The experiment records compatibility and failure dimensions without modifying the RU to fit a technology.
+
+The immediate question is not yet how to write a larger compiler. It is:
+
+> **What must a VLPI PDK be able to do for an RU-native physical-computation program to be instantiated, composed, verified, and scaled?**
+
+Substantial compiler implementation is therefore intentionally held until VLPI-PDK-001 results determine the required compiler operations and abstractions.
+
+See [`docs/pdk/VLPI-PDK-001.md`](docs/pdk/VLPI-PDK-001.md) and [`docs/architecture/VLPI-ROADMAP.md`](docs/architecture/VLPI-ROADMAP.md).
+
 ## Status
 
 This is an evolving open technical disclosure.
