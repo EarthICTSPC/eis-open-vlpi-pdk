@@ -1,0 +1,4 @@
+mcp
+pyyaml
+jsonschema
+pytest
