@@ -1,0 +1,31 @@
+mcpAgentTools:
+  - name: "vlpi.discover"
+    purpose: "Return current experiment, entrypoints, constraints, and evidence policy."
+    mutates: false
+  - name: "vlpi.resolve"
+    purpose: "Resolve VLPI-IR into RU, Contract, DesignContext, Evidence, and PDK references."
+    mutates: false
+  - name: "vlpi.pdk.list"
+    purpose: "List PDK environments available to the current experiment."
+    mutates: false
+  - name: "vlpi.pdk.capabilities"
+    purpose: "Inspect one PDK capability profile."
+    mutates: false
+  - name: "vlpi.pdk.compare"
+    purpose: "Evaluate the same RU against multiple PDK capability profiles."
+    mutates: false
+  - name: "vlpi.validate"
+    purpose: "Validate schemas and reference closure."
+    mutates: false
+  - name: "vlpi.experiment.run"
+    purpose: "Execute repository-contained reference/mock experiments."
+    mutates: false
+    allowedExperiments:
+      - "VLPI-PDK-001"
+  - name: "vlpi.evidence.emit"
+    purpose: "Emit machine-readable capability evidence with provenance."
+    mutates: true
+  - name: "vlpi.physical.request"
+    purpose: "Request controlled physical execution without granting agent authority."
+    mutates: false
+    requiresHumanAuthorization: true

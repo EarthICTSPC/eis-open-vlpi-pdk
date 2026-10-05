@@ -1,0 +1,47 @@
+agentInterface:
+  id: "EIS-VLPI-Agent-Interface"
+  version: "0.1.0"
+  repository: "EarthICTSPC/eis-open-vlpi-pdk"
+  purpose: "Cold-start discovery and controlled experimentation of the executable VLPI physical information model."
+  entrypoints:
+    overview: "README.md"
+    doctrine: "docs/00-overview/EIS_Open_VLPI_Disclosure_Doctrine.md"
+    currentExperiment: "agents/experiments/VLPI-PDK-001.yaml"
+    experimentDefinition: "verification/pdk/VLPI-PDK-001.yaml"
+    compatibilitySchema: "schema/pdk/pdk-compatibility.schema.yaml"
+    vlpiIRSchema: "schema/vlpi-ir/vlpi-ir.schema.yaml"
+    ruSchema: "schema/ru/ru.schema.yaml"
+    contractSchema: "schema/contract/contract.schema.yaml"
+    evidenceSchema: "schema/evidence/evidence.schema.yaml"
+    designContextSchema: "schema/design-context/design-context.schema.yaml"
+  discovery:
+    firstQuestions:
+      - "What is the current experiment?"
+      - "What controlled inputs must remain unchanged?"
+      - "What PDK environments are permitted?"
+      - "What evidence can this experiment produce?"
+      - "What claims are explicitly prohibited?"
+  operations:
+    read: true
+    validate_schema: true
+    resolve_references: true
+    execute_reference_experiment: true
+    compare_pdk_capabilities: true
+    emit_evidence: true
+    generate_physical_artifact: false
+    fabricate: false
+    modify_controlled_pdk: false
+    access_credentials: false
+  evidencePolicy:
+    capabilityPassIsPhysicalValidation: false
+    simulationIsMeasurement: false
+    schemaConformanceIsPhysicalValidation: false
+    expectedOutcomeIsObservedResult: false
+    notRunMustRemainNotRun: true
+  stoppingRules:
+    - "Stop when a required reference cannot be resolved."
+    - "Stop when an experiment requests controlled/proprietary material not available in the authorized environment."
+    - "Stop before fabrication or other consequential physical action."
+    - "Never silently substitute a different PDK."
+    - "Never rewrite the RU merely to make a PDK pass."
+  nextMilestoneAfterExperiment: "VLPI-PDK-002"

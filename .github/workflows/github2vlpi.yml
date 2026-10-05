@@ -1,0 +1,31 @@
+name: GitHub2VLPI
+
+on:
+  pull_request:
+    paths:
+      - "agents/**"
+      - "reference_model/**"
+      - "tests/vlpi-pdk-001/**"
+      - "schema/**"
+      - "ru/**"
+      - "verification/**"
+      - ".github/workflows/github2vlpi.yml"
+  push:
+    branches: ["main", "vlpi-pdk-001-agent-discovery"]
+
+jobs:
+  cold-start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install open agent dependencies
+        run: python -m pip install -r agents/requirements.txt
+      - name: Run RU-001 reference model tests
+        run: pytest -q tests/vlpi-pdk-001/test_reference_physics.py
+      - name: Run VLPI-PDK-001
+        run: python tests/vlpi-pdk-001/test_pdk_matrix.py
+      - name: MCP server import check
+        run: python -c "import agents.mcp_server; print('EIS-VLPI-MCP import PASS')"
