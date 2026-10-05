@@ -1,0 +1,16 @@
+pdk:
+  id: "EIS-REFERENCE-VLPI-PDK"
+  version: "0.1.0"
+  class: "eis-reference"
+  description: "Open executable reference capability model for RU-native VLPI exploration; not a foundry process."
+  capabilities:
+    ruInstantiation: true
+    opticalState: true
+    physicalTransformation: true
+    stateBoundary: true
+    regeneration: true
+    thermalModel: true
+    waferComposition: true
+    pdr: true
+    pct: true
+    ptv: true
