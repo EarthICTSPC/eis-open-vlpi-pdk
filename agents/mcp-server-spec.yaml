@@ -1,0 +1,30 @@
+mcpServer:
+  id: "EIS-VLPI-MCP"
+  version: "0.1.0"
+  transport: "stdio"
+  purpose: "Expose the open VLPI information model and permitted experiments to MCP agents."
+  resources:
+    - "agents/agent-manifest.yaml"
+    - "agents/experiments/VLPI-PDK-001.yaml"
+    - "schema/"
+    - "ru/"
+    - "reference_model/"
+    - "verification/"
+    - "examples/"
+  tools:
+    - "vlpi.discover"
+    - "vlpi.resolve"
+    - "vlpi.pdk.list"
+    - "vlpi.pdk.capabilities"
+    - "vlpi.pdk.compare"
+    - "vlpi.validate"
+    - "vlpi.experiment.run"
+    - "vlpi.evidence.emit"
+  defaultExperiment: "VLPI-PDK-001"
+  security:
+    filesystemScope: "repository-root"
+    networkAccess: false
+    credentials: false
+    proprietaryPdkAccess: false
+    fabricationActions: false
+    humanAuthorizationRequiredForPhysicalActions: true
