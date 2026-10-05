@@ -1,0 +1,29 @@
+agentExperimentContract:
+  version: "0.1.0"
+  principle: "Agents experiment on the executable information model before compiler abstractions are frozen."
+  preconditions:
+    - "Controlled input references resolve."
+    - "Schema validation passes."
+    - "PDK profile is explicitly selected."
+    - "Execution environment is known."
+  invariants:
+    - "RU identity remains unchanged."
+    - "Contract identity remains unchanged."
+    - "VLPI-IR identity remains unchanged."
+    - "PDK substitution is explicit."
+    - "Evidence status is preserved."
+  resultClasses:
+    - "schema-valid"
+    - "capability-compatible"
+    - "capability-incompatible"
+    - "not-run"
+    - "inconclusive"
+  compilerInference:
+    allowed: true
+    rule: "Compiler requirements may be proposed only from observed experiment results and must cite result evidence."
+    prohibited: "Do not encode a compiler feature solely because conventional PIC tooling has that feature."
+  physicalBoundary:
+    simulationAllowed: "Only where the referenced experiment explicitly permits it."
+    fabricationAllowed: false
+    foundrySubmissionAllowed: false
+    credentialHandlingAllowed: false
