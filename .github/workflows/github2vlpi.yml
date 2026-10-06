@@ -11,7 +11,7 @@ on:
       - "verification/**"
       - ".github/workflows/github2vlpi.yml"
   push:
-    branches: ["main", "vlpi-pdk-001-agent-discovery"]
+    branches: ["main", "vlpi-pdk-001-agent-discovery", "vlpi-github2vlpi-002"]
 
 jobs:
   cold-start:
