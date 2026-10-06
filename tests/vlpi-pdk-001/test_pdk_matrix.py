@@ -64,7 +64,8 @@ def build_result(env, pdk, failures):
             },
             "disposition": disposition,
             "evidence": {
-                "status": "not-run" if disposition == "not-run" else "computationally-demonstrated",
+                "status": "not-run" if disposition == "not-run" else "specified",
+                "resultKind": "capability-compatibility",
                 "physicalValidationRequired": True,
                 "provenanceRequired": True,
                 "notes": "Capability-harness result only; not fabrication, measurement, PVR PASS, BIST PASS, or foundry acceptance.",
