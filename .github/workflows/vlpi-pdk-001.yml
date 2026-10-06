@@ -9,7 +9,7 @@ on:
       - "tests/vlpi-pdk-001/**"
       - ".github/workflows/vlpi-pdk-001.yml"
   push:
-    branches: ["main", "vlpi-pdk-001"]
+    branches: ["main", "vlpi-pdk-001", "vlpi-github2vlpi-002"]
 
 jobs:
   matrix:
