@@ -72,7 +72,7 @@ properties:
             enum: [specified, computationally-demonstrated, experimentally-demonstrated, measured, proposed-hypothesis, not-run]
           physicalValidationRequired: {type: boolean}
           provenanceRequired: {type: boolean}
-          resultKind: {type: string}
+          resultKind: {type: string, description: "Semantic kind of the compatibility evidence result."}
           notes: {type: string}
       provenance:
         type: object
