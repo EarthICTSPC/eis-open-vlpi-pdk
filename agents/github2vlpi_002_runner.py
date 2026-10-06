@@ -13,35 +13,32 @@ from mcp.client.stdio import stdio_client
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "artifacts" / "github2vlpi-002-run.json"
 
+def _normalize(value: Any) -> Any:
+    if isinstance(value, dict) and "result" in value:
+        return _normalize(value["result"])
+    if isinstance(value, str):
+        try:
+            return _normalize(json.loads(value))
+        except json.JSONDecodeError:
+            return value
+    if isinstance(value, list):
+        return [_normalize(item) for item in value]
+    return value
+
 def decode(result: Any) -> Any:
     value = getattr(result, "structured_content", None)
     if value is None:
         for block in getattr(result, "content", []) or []:
             text = getattr(block, "text", None)
             if text:
-                try:
-                    value = json.loads(text)
-                except json.JSONDecodeError:
-                    value = text
+                value = text
                 break
     if value is None:
         raise RuntimeError("MCP tool returned no readable content")
 
-    # Normalize transport wrappers recursively. MCP SDK renderings may expose
-    # structured payloads as JSON strings or under a result wrapper. The
-    # experiment semantics must not depend on that transport representation.
-    for _ in range(6):
-        if isinstance(value, dict) and "result" in value:
-            value = value["result"]
-            continue
-        if isinstance(value, str):
-            try:
-                value = json.loads(value)
-                continue
-            except json.JSONDecodeError:
-                pass
-        break
-    return value
+    # Normalize wrappers recursively, including wrappers nested inside lists.
+    # Experiment semantics must not depend on MCP SDK transport rendering.
+    return _normalize(value)
 
 async def call(session: ClientSession, name: str, args: dict | None = None) -> Any:
     result = await session.call_tool(name, args or {})
