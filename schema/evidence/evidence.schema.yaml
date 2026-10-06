@@ -70,6 +70,7 @@ properties:
           outcome:
             type: string
             enum: [pass, fail, partial, inconclusive, not-run]
+          resultKind: {type: string}
           summary: {type: string}
           metrics:
             type: array
