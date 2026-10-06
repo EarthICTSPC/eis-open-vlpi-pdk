@@ -47,7 +47,28 @@ async def call(session: ClientSession, name: str, args: dict | None = None) -> A
     return decode(result)
 
 def interpret_phase(results: list[dict]) -> dict:
-    by_phase = {float(x["phaseRad"]): float(x["residualPower"]) for x in results}
+    normalized = []
+    for index, item in enumerate(results):
+        item = _normalize(item)
+        if isinstance(item, dict) and "result" in item:
+            item = _normalize(item["result"])
+        if isinstance(item, str):
+            try:
+                item = _normalize(json.loads(item))
+            except json.JSONDecodeError as exc:
+                raise TypeError(
+                    f"Phase result {index} remained non-JSON text after MCP normalization: {item!r}"
+                ) from exc
+        if not isinstance(item, dict):
+            raise TypeError(
+                f"Phase result {index} has unexpected shape: type={type(item).__name__} value={item!r}"
+            )
+        normalized.append(item)
+
+    by_phase = {
+        float(x["phaseRad"]): float(x["residualPower"])
+        for x in normalized
+    }
     zero = by_phase[0.0]
     pi = min(by_phase, key=lambda x: abs(x - math.pi))
     return {
