@@ -24,7 +24,7 @@ jobs:
       - name: Install open agent dependencies
         run: python -m pip install -r agents/requirements.txt
       - name: Run RU-001 reference model tests
-        run: pytest -q tests/vlpi-pdk-001/test_reference_physics.py
+        run: python -m pytest -q tests/vlpi-pdk-001/test_reference_physics.py
       - name: Run VLPI-PDK-001
         run: python tests/vlpi-pdk-001/test_pdk_matrix.py
       - name: MCP server import check
