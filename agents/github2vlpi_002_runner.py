@@ -56,6 +56,9 @@ async def main() -> None:
             tools = await session.list_tools()
             manifest = await call(session, "vlpi_discover")
             pdk_list = await call(session, "vlpi_pdk_list")
+            # Normalize the MCP transport representation without reading the repository directly.
+            if isinstance(pdk_list, dict):
+                pdk_list = list(pdk_list.values())
             assert manifest["agentInterface"]["id"] == "EIS-VLPI-Agent-Interface"
 
             # Blind phase sweep: the agent supplies inputs and phases, then
