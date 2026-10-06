@@ -8,12 +8,16 @@ import json
 import os
 import subprocess
 from pathlib import Path
+import sys
+
+ROOT = Path(os.environ.get("EIS_OPEN_VLPI_ROOT", Path(__file__).resolve().parents[1]))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import yaml
 from jsonschema import Draft202012Validator
 from mcp.server.fastmcp import FastMCP
 
-ROOT = Path(os.environ.get("EIS_OPEN_VLPI_ROOT", Path(__file__).resolve().parents[1]))
 mcp = FastMCP("EIS-VLPI-MCP")
 
 
