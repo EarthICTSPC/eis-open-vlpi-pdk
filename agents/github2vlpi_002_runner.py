@@ -56,9 +56,22 @@ async def main() -> None:
             tools = await session.list_tools()
             manifest = await call(session, "vlpi_discover")
             pdk_list = await call(session, "vlpi_pdk_list")
-            # Normalize the MCP transport representation without reading the repository directly.
+            # Normalize MCP structured output at the transport boundary.
+            # The runner must tolerate the SDK's representation without
+            # confusing a mapping wrapper, a list of environment records, or
+            # a model-readable list of IDs.
+            pdk_list_raw_type = type(pdk_list).__name__
             if isinstance(pdk_list, dict) and "result" in pdk_list:
                 pdk_list = pdk_list["result"]
+            if isinstance(pdk_list, list) and all(isinstance(x, str) for x in pdk_list):
+                pdk_environment_ids = list(pdk_list)
+            elif isinstance(pdk_list, list) and all(isinstance(x, dict) and "id" in x for x in pdk_list):
+                pdk_environment_ids = [x["id"] for x in pdk_list]
+            else:
+                raise TypeError(
+                    f"Unexpected vlpi_pdk_list MCP shape: type={type(pdk_list).__name__} "
+                    f"value={pdk_list!r}"
+                )
             assert manifest["agentInterface"]["id"] == "EIS-VLPI-Agent-Interface"
 
             # Blind phase sweep: the agent supplies inputs and phases, then
@@ -88,11 +101,12 @@ async def main() -> None:
                     "transport": "stdio",
                     "server": "EIS-VLPI-MCP",
                     "toolsDiscovered": [t.name for t in tools.tools],
+                    "pdkListRawType": pdk_list_raw_type,
                 },
                 "discovery": {
                     "agentInterface": manifest["agentInterface"]["id"],
                     "currentExperiment": manifest["agentInterface"]["entrypoints"]["experimentDefinition"],
-                    "pdkEnvironments": [x["id"] for x in pdk_list],
+                    "pdkEnvironments": pdk_environment_ids,
                 },
                 "invariants": {
                     "controlledRU": "ru/RU-001/ru.yaml",
