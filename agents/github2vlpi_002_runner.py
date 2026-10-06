@@ -15,16 +15,34 @@ OUT = ROOT / "artifacts" / "github2vlpi-002-run.json"
 
 def decode(result: Any) -> Any:
     value = getattr(result, "structured_content", None)
-    if value is not None:
-        return value
-    for block in getattr(result, "content", []) or []:
-        text = getattr(block, "text", None)
-        if text:
+    if value is None:
+        for block in getattr(result, "content", []) or []:
+            text = getattr(block, "text", None)
+            if text:
+                try:
+                    value = json.loads(text)
+                except json.JSONDecodeError:
+                    value = text
+                break
+    if value is None:
+        raise RuntimeError("MCP tool returned no readable content")
+
+    # Normalize SDK/tool-result wrappers at the MCP boundary. Different
+    # FastMCP/SDK result renderings may expose a single "result" wrapper or
+    # serialize the structured payload as JSON text. Experiment semantics
+    # must not depend on either transport representation.
+    for _ in range(3):
+        if isinstance(value, dict) and set(value) == {"result"}:
+            value = value["result"]
+            continue
+        if isinstance(value, str):
             try:
-                return json.loads(text)
+                value = json.loads(value)
+                continue
             except json.JSONDecodeError:
-                return text
-    raise RuntimeError("MCP tool returned no readable content")
+                pass
+        break
+    return value
 
 async def call(session: ClientSession, name: str, args: dict | None = None) -> Any:
     result = await session.call_tool(name, args or {})
