@@ -27,12 +27,11 @@ def decode(result: Any) -> Any:
     if value is None:
         raise RuntimeError("MCP tool returned no readable content")
 
-    # Normalize SDK/tool-result wrappers at the MCP boundary. Different
-    # FastMCP/SDK result renderings may expose a single "result" wrapper or
-    # serialize the structured payload as JSON text. Experiment semantics
-    # must not depend on either transport representation.
-    for _ in range(3):
-        if isinstance(value, dict) and set(value) == {"result"}:
+    # Normalize transport wrappers recursively. MCP SDK renderings may expose
+    # structured payloads as JSON strings or under a result wrapper. The
+    # experiment semantics must not depend on that transport representation.
+    for _ in range(6):
+        if isinstance(value, dict) and "result" in value:
             value = value["result"]
             continue
         if isinstance(value, str):
