@@ -11,7 +11,7 @@ on:
       - "verification/**"
       - ".github/workflows/github2vlpi.yml"
   push:
-    branches: ["main", "vlpi-pdk-001-agent-discovery"]
+    branches: ["main", "vlpi-pdk-001-agent-discovery", "vlpi-github2vlpi-002", "github2vlpi-002-mcp-execution"]
 
 jobs:
   cold-start:
@@ -24,8 +24,16 @@ jobs:
       - name: Install open agent dependencies
         run: python -m pip install -r agents/requirements.txt
       - name: Run RU-001 reference model tests
-        run: pytest -q tests/vlpi-pdk-001/test_reference_physics.py
+        run: python -m pytest -q tests/vlpi-pdk-001/test_reference_physics.py
       - name: Run VLPI-PDK-001
         run: python tests/vlpi-pdk-001/test_pdk_matrix.py
       - name: MCP server import check
         run: python -c "import agents.mcp_server; print('EIS-VLPI-MCP import PASS')"
+      - name: Execute GitHub2VLPI-002 through MCP
+        run: python agents/github2vlpi_002_runner.py
+      - name: Upload GitHub2VLPI-002 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: github2vlpi-002-evidence
+          path: artifacts/github2vlpi-002-run.json
+          if-no-files-found: error
