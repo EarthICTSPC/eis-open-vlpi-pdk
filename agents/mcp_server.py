@@ -29,7 +29,7 @@ def vlpi_discover() -> dict:
 
 
 @mcp.tool()
-def vlpi_pdk_list() -> dict:
+def vlpi_pdk_list() -> list[dict]:
     return load_yaml("verification/pdk/VLPI-PDK-001.yaml")["experiment"]["environments"]
 
 
