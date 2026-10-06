@@ -61,17 +61,20 @@ async def main() -> None:
             # confusing a mapping wrapper, a list of environment records, or
             # a model-readable list of IDs.
             pdk_list_raw_type = type(pdk_list).__name__
-            if isinstance(pdk_list, dict) and "result" in pdk_list:
-                pdk_list = pdk_list["result"]
-            if isinstance(pdk_list, list) and all(isinstance(x, str) for x in pdk_list):
-                pdk_environment_ids = list(pdk_list)
-            elif isinstance(pdk_list, list) and all(isinstance(x, dict) and "id" in x for x in pdk_list):
-                pdk_environment_ids = [x["id"] for x in pdk_list]
-            else:
+            if not isinstance(pdk_list, dict) or "environments" not in pdk_list:
                 raise TypeError(
                     f"Unexpected vlpi_pdk_list MCP shape: type={type(pdk_list).__name__} "
                     f"value={pdk_list!r}"
                 )
+            environments = pdk_list["environments"]
+            if not isinstance(environments, list) or not all(
+                isinstance(x, dict) and "id" in x for x in environments
+            ):
+                raise TypeError(
+                    f"Unexpected vlpi_pdk_list environments shape: type={type(environments).__name__} "
+                    f"value={environments!r}"
+                )
+            pdk_environment_ids = [x["id"] for x in environments]
             assert manifest["agentInterface"]["id"] == "EIS-VLPI-Agent-Interface"
 
             # Blind phase sweep: the agent supplies inputs and phases, then
