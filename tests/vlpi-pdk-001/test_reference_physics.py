@@ -4,7 +4,7 @@ from reference_model.ru001 import residual_field, phase_grid
 
 def test_reference_model_zero_residual_for_equal_in_phase_inputs():
     r = residual_field(1 + 0j, 1 + 0j, 0.0)
-    assert isclose(r.residual, 0.0, abs_tol=1e-12)
+    assert abs(r.residual) <= 1e-12
     assert isclose(r.residual_power, 0.0, abs_tol=1e-12)
 
 
