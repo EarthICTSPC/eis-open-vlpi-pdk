@@ -29,8 +29,9 @@ def vlpi_discover() -> dict:
 
 
 @mcp.tool()
-def vlpi_pdk_list() -> list[dict]:
-    return load_yaml("verification/pdk/VLPI-PDK-001.yaml")["experiment"]["environments"]
+def vlpi_pdk_list() -> dict:
+    """Return an explicitly object-shaped PDK environment collection over MCP."""
+    return {"environments": load_yaml("verification/pdk/VLPI-PDK-001.yaml")["experiment"]["environments"]}
 
 
 @mcp.tool()
