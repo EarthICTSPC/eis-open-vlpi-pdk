@@ -1,0 +1,106 @@
+apiVersion: eis-vlpi/v1
+kind: SwarmExperiment
+metadata:
+  name: EIS-SWARM-001
+  version: "0.1.0"
+  title: "Derived Agent Population"
+  status: specified
+  owner: "Earth ICT, SPC"
+
+objective: >
+  Test whether a formal problem specification can derive an admissible agent
+  population and dependency structure rather than having a human or LLM
+  prescribe a fixed swarm size.
+
+principle: >
+  Agent architecture is derived from required state transformations, contracts,
+  evidence boundaries, and dependency constraints. Agent count is an output,
+  not a design input.
+
+bounded_problem:
+  name: "PIC Bounded Design Problem: 2x2 MZI Residual Field"
+  alignment: "RU-001"
+  inputs: [E_in1, E_in2, phase_rad]
+  required_outputs: [sweep_results, ok]
+  evidence_admissible: [mathematical, executable]
+  evidence_inadmissible: [physical]
+
+agent_schema:
+  fields: [id, capability, inputs, outputs, evidence_class]
+  admissibility:
+    rule: "evidence_class in {mathematical, executable}"
+
+candidate_agents:
+  - {id: A_FIELD, capability: COMPLEX_FIELD, inputs: [E_in1, E_in2, phase_rad], outputs: [E_out1, E_out2], evidence_class: mathematical}
+  - {id: A_RESIDUAL, capability: RESIDUAL_INTENSITY, inputs: [E_out2], outputs: [r], evidence_class: mathematical}
+  - {id: A_ENERGY, capability: ENERGY_CONSERVATION, inputs: [E_out1, E_out2], outputs: [energy_ok], evidence_class: mathematical}
+  - {id: A_SWEEP, capability: PHASE_SWEEP, inputs: [phase_list, field_results, residual_results], outputs: [sweep_results], evidence_class: executable}
+  - {id: A_INVARIANT, capability: INVARIANT_CHECK, inputs: [sweep_results, energy_results], outputs: [ok], evidence_class: mathematical}
+  - {id: A_FAB, capability: FABRICATE, inputs: [], outputs: [device], evidence_class: physical}
+
+derivation:
+  method: backward_chaining
+  required_outputs: [sweep_results, ok]
+  selected_population: [A_FIELD, A_RESIDUAL, A_ENERGY, A_SWEEP, A_INVARIANT]
+  rejected:
+    - id: A_FAB
+      reason: "physical evidence is outside the bounded problem admissibility set"
+  dependency_edges:
+    - [A_FIELD, A_RESIDUAL]
+    - [A_FIELD, A_ENERGY]
+    - [A_FIELD, A_SWEEP]
+    - [A_RESIDUAL, A_SWEEP]
+    - [A_ENERGY, A_INVARIANT]
+    - [A_SWEEP, A_INVARIANT]
+  closure_rule: >
+    Every required output must be reachable from problem inputs through
+    admissible agent transformations.
+  minimality_rule: >
+    For this bounded problem and admissibility rule, removing any selected
+    agent must make at least one required output unreachable or unverifiable.
+
+verification_independence:
+  enabled: true
+  rule: "verification_agent != generation_agent"
+  purpose: >
+    Test whether independent verification changes the derived population or
+    dependency graph, and whether the formal system can express this as a
+    constraint rather than a human convention.
+
+refinement:
+  principle: >
+    A single agent may implement multiple transformations, and may later be
+    refined into cooperating agents, provided the refined composition preserves
+    the externally specified contract.
+
+heterogeneous_domains:
+  enabled: true
+  domains: [VLSI, VLPI, Hybrid, Fabrication, System]
+  rule: >
+    Domain is an agent attribute, not a separate swarm architecture. VLSI and
+    VLPI capabilities may participate in one heterogeneous dependency graph
+    when their contracts compose.
+
+evidence_boundary:
+  mathematical_model: admissible
+  executable_software: admissible
+  physical_fabrication: inadmissible_for_bounded_experiment
+  physical_measurement: inadmissible_for_bounded_experiment
+  foundry_acceptance: inadmissible_for_bounded_experiment
+
+compiler_hold:
+  architecture_frozen: false
+  rule: >
+    This experiment must not freeze compiler requirements. Language or compiler
+    requirements may be proposed only after observed swarm derivation results
+    justify them.
+
+next_experiment:
+  name: EIS-SWARM-001-A
+  title: "Verification Independence Perturbation"
+  change: ["Require verification to be independent of generation."]
+  observations:
+    - "Does the derived population change?"
+    - "Does a new agent become necessary?"
+    - "Does the dependency graph remain acyclic and admissible?"
+    - "Does derivation fail, and what minimal contract is missing?"
