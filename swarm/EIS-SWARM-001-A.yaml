@@ -1,0 +1,78 @@
+apiVersion: eis-vlpi/v1
+kind: SwarmExperiment
+metadata:
+  name: EIS-SWARM-001-A
+  version: "0.1.0"
+  title: "Independent LLM Population Derivation from Frozen 002 Evidence"
+  status: specified
+  owner: "Earth ICT, SPC"
+
+objective: >
+  Determine whether independent LLMs derive materially similar admissible agent
+  populations and dependency structures from the same frozen GitHub2VLPI-002
+  empirical evidence, without being given a candidate population.
+
+frozen_input:
+  experiment: GitHub2VLPI-002
+  evidence_commit: 7e8702353d29b8d6ff7ee67eabb6191795181be7
+  source: evidence/github2vlpi-002/github2vlpi-002-run.json
+  physical_validation: false
+  prior_population_derivation_is_input: false
+
+bounded_problem:
+  source: frozen GitHub2VLPI-002 result
+  domain: VLPI
+  evidence_admissible: [mathematical, executable]
+  evidence_inadmissible: [physical, measured, fabricated, foundry-accepted]
+  objective: >
+    Derive the smallest transformation population sufficient to reproduce,
+    interpret, classify, and preserve the observed evidence boundary.
+
+blindness:
+  forbidden_inputs:
+    - "candidate agent population from EIS-SWARM-001"
+    - "selected_population from PR #10"
+    - "dependency_edges from PR #10"
+    - "any expected population supplied by EIS"
+  permitted_inputs:
+    - "frozen GitHub2VLPI-002 evidence"
+    - "repository experiment schema and contracts"
+    - "general domain knowledge"
+
+required_output:
+  - agent_transformations
+  - input_output_contracts
+  - evidence_classification
+  - dependency_graph
+  - admissibility_rejections
+  - minimality_argument
+  - unresolved_contracts
+  - confidence_and_disagreement
+
+verification_independence:
+  required: true
+  rule: >
+    The agent deriving the population must not be the sole agent adjudicating
+    whether its own population is minimal or admissible.
+
+comparison:
+  models: "at least 3 independent LLMs when available"
+  compare:
+    - normalized_agent_capabilities
+    - population_cardinality
+    - dependency_edges
+    - rejected_transformations
+    - unresolved_contracts
+  interpretation: >
+    Agreement is evidence of specification stability; disagreement is evidence
+    about missing or ambiguous contracts. Neither is evidence of physical truth.
+
+compiler_hold:
+  architecture_frozen: false
+  rule: "Do not derive compiler features unless directly required by observed evidence."
+
+next_stage:
+  name: "Minimum Formal Field-Transformation Vocabulary"
+  gate: >
+    Begin only after independent population derivations are recorded and
+    disagreements have been classified.
