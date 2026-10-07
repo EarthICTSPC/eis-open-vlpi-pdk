@@ -1,0 +1,21 @@
+name: OPENLLM-GITHUB2VLPI-002 HARNESS-001
+
+on:
+  push:
+    paths:
+      - "harness/**"
+      - "task/task-specification.yaml"
+      - ".github/workflows/experiment-a-harness.yml"
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run deterministic harness self-test
+        run: python3 harness/selftest.py
+      - name: Verify Experiment A specification is unchanged on this branch
+        run: |
+          test -f docs/experiments/OPENLLM-GITHUB2VLPI-002-EXPERIMENT-A.md
+          test -f docs/experiments/EIS-OPENLLM-GITHUB2VLPI-002-STOC.yaml
