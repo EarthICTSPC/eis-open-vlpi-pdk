@@ -1,0 +1,19 @@
+experiment: OPENLLM-GITHUB2VLPI-002
+name: "Experiment A bounded task interface"
+status: executable-reference
+task_revision: A-1
+operations:
+  - discover
+  - create_state
+  - transition
+  - observe
+  - evaluate_contract
+  - compose
+blindness:
+  internal_reference_equation: not_exposed_by_api
+  preferred_embodiment: excluded
+evidence:
+  class: computationally-demonstrated
+  physical_validation: false
+  fabrication: false
+  bist_pass: false
