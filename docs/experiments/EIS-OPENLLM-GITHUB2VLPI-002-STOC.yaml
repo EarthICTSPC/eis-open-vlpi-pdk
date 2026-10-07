@@ -1,0 +1,58 @@
+experiment: OPENLLM-GITHUB2VLPI-002
+name: "Experiment A — S/T/O/C Bounded Vocabulary Test"
+status: specified
+question: "Can an independent open LLM/agent perform a bounded VLPI-relevant discovery-execution-observation-contract-composition task using only S, T, O, C?"
+candidate_vocabulary:
+  S:
+    name: State
+    definition: "Representation of a physical configuration or computationally relevant state."
+  T:
+    name: Transition
+    definition: "Parameterized process mapping an input state to an output state."
+  O:
+    name: Observation
+    definition: "Recorded result of observing a state or transition under stated conditions."
+  C:
+    name: Contract
+    definition: "Acceptance predicate over a state, transition, or observation."
+task:
+  domain: "bounded optical-interference transformation"
+  scope: "reference computation only"
+  stages: [discover, execute, observe, contract_evaluate, compose]
+  physical_equation_exposed: false
+  exact_field_function_exposed: false
+  physical_fabrication: false
+no_import:
+  forbidden:
+    - Boolean_gate
+    - MAC
+    - matrix
+    - vector
+    - tensor
+    - compiler
+    - residual_equation
+    - field_algebra
+    - optimizer
+    - compatibility_primitive
+    - regeneration_primitive
+    - constraint_reduction_primitive
+  rule: "Architectural abstractions may not be assumed as primitives; if required, report them as derived, required-but-forbidden, or implementation-only."
+ablation:
+  subsets: [STOC, STO, STC, SOC, TOC, ST, SO, SC, TO, TC, OC, S, T, O, C]
+  empty_set: not_applicable
+acceptance:
+  result_classes: [PASS, FAIL-MISSING, FAIL-AMBIGUOUS, FAIL-IMPORT, FAIL-IMPLEMENTATION, FAIL-AGENT]
+instrumentation:
+  required: [model_identity, agent_identity, experiment_revision, repository_revision, supplied_prompt, supplied_vocabulary, state_events, transition_events, observation_events, contract_events, composition_events, import_attempts, failures, retries, human_interventions, evidence_classification]
+evidence:
+  expected: [specified, computationally-demonstrated, derived-metric, proposed-hypothesis]
+  prohibited_promotions: [physical_validation, measured, fabricated, PVR_PASS, BIST_PASS, foundry_accepted]
+independence:
+  preferred_model_count: 2
+  interpretation: "Agreement supports reproducibility of the bounded task; disagreement identifies specification or vocabulary uncertainty."
+decision_gate:
+  require_all_ablation_results: true
+  require_raw_traces: true
+  require_failure_classification: true
+  require_independent_review: true
+  global_minimality_claim_allowed: false
