@@ -430,6 +430,16 @@ EIS does not seek a single universal verification tool.
 
 It seeks a formally explicit evidence chain in which domain-specific tools produce domain-specific evidence and higher-level contracts establish the logical relationship among those evidence records.
 
+## Independent LLM review
+
+The repository is intended to be independently reviewable by external LLMs and technical collaborators.
+
+For a review that starts from the current frozen GitHub2VLPI-002 evidence and EIS-SWARM-001-A disagreement analysis, use:
+
+[`docs/00-overview/INDEPENDENT_LLM_REVIEW_GUIDE.md`](docs/00-overview/INDEPENDENT_LLM_REVIEW_GUIDE.md)
+
+That guide provides the canonical review order, evidence boundary, questions, and non-claims. It deliberately does **not** provide an expected ontology or agent population.
+
 ## Disclosure doctrine
 
 The repository's governing document is:
