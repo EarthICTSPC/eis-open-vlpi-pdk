@@ -63,7 +63,7 @@ The intended public endpoint is:
 
 The deployed service MUST use MCP Streamable HTTP as the external experiment transport.
 
-The hosted service keeps one Machine running for this first experiment. This is intentional: HARNESS-001 currently holds task state in process memory, so automatic Machine stopping/restarting would create an avoidable session/state-continuity variable. Fly's current autostop/autostart behavior is designed to stop idle Machines and start them on traffic; EIS is deliberately not using that behavior for this stateful first boundary. citeturn0search0turn0search2
+The hosted service keeps one Machine running for this first experiment. This is intentional: HARNESS-001 currently holds task state in process memory, so automatic Machine stopping/restarting would create an avoidable session/state-continuity variable. Fly's current autostop/autostart behavior is designed to stop idle Machines and start them on traffic; EIS is deliberately not using that behavior for this stateful first boundary.
 
 The raw HTTP operations implemented by HARNESS-001 are implementation infrastructure and are not an alternative independent-agent protocol.
 
@@ -202,7 +202,7 @@ No execution under this boundary may be promoted to:
 
 ## 12. Deployment acceptance record
 
-The repository contains `harness/transport_acceptance.py`, which is the authoritative transport/task-interface acceptance test for this boundary. It uses the official MCP Python SDK's Streamable HTTP client to verify tool discovery, the six bounded operations, the blindness/evidence boundary, composition, and malformed-input rejection. The SDK supports URL-based Streamable HTTP clients directly. citeturn1search1turn1search2
+The repository contains `harness/transport_acceptance.py`, which is the authoritative transport/task-interface acceptance test for this boundary. It uses the official MCP Python SDK's Streamable HTTP client to verify tool discovery, the six bounded operations, the blindness/evidence boundary, composition, and malformed-input rejection. The SDK supports URL-based Streamable HTTP clients directly.
 
 This test does **not** establish cryptographic P5 provenance. HARNESS-001 currently does not implement Ed25519 transcript signing, replay protection, or cross-session signature validation. Therefore N5/N6/N10-style cryptographic tests are **not** claimed, and no P5a cryptographic status is inferred from this transport test. Experiment A itself defines computational evidence classes and does not require cryptographic signing. Any future cryptographic provenance layer must be a separately specified artifact and must not be silently introduced here.
 
@@ -251,9 +251,9 @@ This artifact does not establish:
 
 ## 15. Deployment/session assumptions
 
-For the first deployment, `fly.toml` sets `auto_stop_machines = false`, `auto_start_machines = false`, and `min_machines_running = 1`. This is a deliberate experimental-continuity choice, not a general EIS hosting policy. Fly documents that `min_machines_running = 1` keeps one Machine warm, while automatic stopping can stop idle Machines. citeturn0search0turn0search2
+For the first deployment, `fly.toml` sets `auto_stop_machines = false`, `auto_start_machines = false`, and `min_machines_running = 1`. This is a deliberate experimental-continuity choice, not a general EIS hosting policy. Fly documents that `min_machines_running = 1` keeps one Machine warm, while automatic stopping can stop idle Machines.
 
-The MCP Python SDK's current Streamable HTTP implementation also has a 30-minute default legacy-session idle timeout; HARNESS-001 makes that value explicit at 1800 seconds. citeturn2search3turn2search6
+The MCP Python SDK's current Streamable HTTP implementation also has a 30-minute default legacy-session idle timeout; HARNESS-001 makes that value explicit at 1800 seconds.
 
 The first deployment intentionally uses one Machine. Multi-Machine scaling, shared session state, resumability, or persistent state are outside this boundary.
 
