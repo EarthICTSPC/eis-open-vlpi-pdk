@@ -14,6 +14,9 @@ mcp = FastMCP(
         "Execute the public OPENLLM-GITHUB2VLPI-002 Experiment A bounded task. "
         "Do not treat implementation details as ontology primitives."
     ),
+    host="0.0.0.0",
+    port=8000,
+    session_idle_timeout=1800,
 )
 state = ExperimentState()
 
@@ -55,4 +58,4 @@ def compose(first_state_id: str, second_phase_delta: float) -> dict:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=8000, session_idle_timeout=1800)
+    mcp.run(transport="streamable-http")
