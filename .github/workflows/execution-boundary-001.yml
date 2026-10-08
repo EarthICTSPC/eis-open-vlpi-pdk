@@ -30,6 +30,32 @@ jobs:
       - name: Run HARNESS-001 deterministic self-test
         run: python3 harness/selftest.py
 
+      - name: Install MCP SDK
+        run: python3 -m pip install --disable-pip-version-check -r harness/requirements.txt
+
+      - name: Start local MCP Streamable HTTP harness
+        run: |
+          nohup python3 harness/mcp_server.py > /tmp/eis-harness.log 2>&1 &
+          echo $! > /tmp/eis-harness.pid
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/eis-harness.log
+          exit 1
+
+      - name: Run MCP transport acceptance
+        run: python3 harness/transport_acceptance.py http://127.0.0.1:8000/mcp
+
+      - name: Stop local MCP harness
+        if: always()
+        run: |
+          if test -f /tmp/eis-harness.pid; then
+            kill "$(cat /tmp/eis-harness.pid)" || true
+          fi
+
       - name: Validate deployment boundary files
         run: |
           test -f fly.toml
