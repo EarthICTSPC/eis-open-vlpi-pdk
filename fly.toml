@@ -1,6 +1,6 @@
 app = "eis-github2vlpi-harness"
 
-primary_region = "sjc"
+primary_region = "iad"
 
 [build]
   dockerfile = "harness/Dockerfile"
