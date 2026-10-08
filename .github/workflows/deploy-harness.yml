@@ -36,7 +36,7 @@ jobs:
           test -f fly.toml
 
       - name: Deploy HARNESS-001
-        run: flyctl deploy --app "$FLY_APP_NAME" --config fly.toml --remote-only
+        run: flyctl deploy --app "$FLY_APP_NAME" --region "$FLY_REGION" --config fly.toml --remote-only
 
       - name: Verify public HTTPS health endpoint
         run: |
