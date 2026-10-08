@@ -1,0 +1,43 @@
+name: OPENLLM-GITHUB2VLPI-002 HARNESS-001 deployment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eis-github2vlpi-harness-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy HARNESS-001 to Fly.io
+    runs-on: ubuntu-latest
+    environment:
+      name: fly-production
+      url: https://${{ vars.FLY_APP_NAME }}.fly.dev/mcp
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      FLY_APP_NAME: ${{ vars.FLY_APP_NAME }}
+      FLY_REGION: ${{ vars.FLY_REGION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Validate Fly deployment configuration
+        run: |
+          test -n "$FLY_API_TOKEN"
+          test -n "$FLY_APP_NAME"
+          test -n "$FLY_REGION"
+          test -f fly.toml
+
+      - name: Deploy HARNESS-001
+        run: flyctl deploy --app "$FLY_APP_NAME" --config fly.toml --remote-only
+
+      - name: Verify public HTTPS health endpoint
+        run: |
+          curl --fail --silent --show-error --location             "https://$FLY_APP_NAME.fly.dev/health"
