@@ -1,0 +1,69 @@
+name: OPENLLM-GITHUB2VLPI-002 EXECUTION-BOUNDARY-001
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "fly.toml"
+      - "harness/**"
+      - ".github/workflows/deploy-harness.yml"
+      - ".github/workflows/execution-boundary-001.yml"
+      - "docs/experiments/OPENLLM-GITHUB2VLPI-002-EXECUTION-BOUNDARY-001.md"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate execution boundary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify frozen Experiment A artifacts are unchanged
+        run: |
+          git diff --exit-code origin/main --             docs/experiments/OPENLLM-GITHUB2VLPI-002-EXPERIMENT-A.md             docs/experiments/EIS-OPENLLM-GITHUB2VLPI-002-STOC.yaml             task/task-specification.yaml
+
+      - name: Run HARNESS-001 deterministic self-test
+        run: python3 harness/selftest.py
+
+      - name: Install MCP SDK
+        run: python3 -m pip install --disable-pip-version-check -r harness/requirements.txt
+
+      - name: Start local MCP Streamable HTTP harness
+        run: |
+          nohup python3 harness/mcp_server.py > /tmp/eis-harness.log 2>&1 &
+          echo $! > /tmp/eis-harness.pid
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/eis-harness.log
+          exit 1
+
+      - name: Run MCP transport acceptance
+        run: python3 harness/transport_acceptance.py http://127.0.0.1:8000/mcp
+
+      - name: Stop local MCP harness
+        if: always()
+        run: |
+          if test -f /tmp/eis-harness.pid; then
+            kill "$(cat /tmp/eis-harness.pid)" || true
+          fi
+
+      - name: Validate deployment boundary files
+        run: |
+          test -f fly.toml
+          test -f .github/workflows/deploy-harness.yml
+          grep -q 'internal_port = 8000' fly.toml
+          grep -q 'force_https = true' fly.toml
+          grep -q 'path = "/health"' fly.toml
+          grep -q 'fly-production' .github/workflows/deploy-harness.yml
+          grep -q 'FLY_API_TOKEN' .github/workflows/deploy-harness.yml
+          grep -q 'FLY_APP_NAME' .github/workflows/deploy-harness.yml
+          grep -q 'FLY_REGION' .github/workflows/deploy-harness.yml

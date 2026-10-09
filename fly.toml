@@ -1,0 +1,26 @@
+app = "eis-github2vlpi-harness"
+
+primary_region = "iad"
+
+[build]
+  dockerfile = "harness/Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = false
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/health"
+
+[vm]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

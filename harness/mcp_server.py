@@ -6,6 +6,9 @@ Experiment A vocabulary.
 """
 
 from mcp.server.fastmcp import FastMCP
+from starlette.requests import Request
+from starlette.responses import JSONResponse
+
 from experiment_a_service import ExperimentState
 
 mcp = FastMCP(
@@ -14,8 +17,17 @@ mcp = FastMCP(
         "Execute the public OPENLLM-GITHUB2VLPI-002 Experiment A bounded task. "
         "Do not treat implementation details as ontology primitives."
     ),
+    host="0.0.0.0",
+    port=8000,
+    session_idle_timeout=1800,
 )
 state = ExperimentState()
+
+
+@mcp.custom_route("/health", methods=["GET"])
+async def health_check(request: Request) -> JSONResponse:
+    """Provide the HTTP health endpoint used by CI and Fly.io checks."""
+    return JSONResponse({"status": "ok", "service": "HARNESS-001"})
 
 
 @mcp.tool()
