@@ -12,7 +12,8 @@ import asyncio
 import json
 import sys
 
-from mcp import Client
+from mcp import ClientSession
+from mcp.client.streamable_http import streamablehttp_client
 
 
 REQUIRED_TOOLS = {
@@ -47,7 +48,13 @@ def structured(result):
 
 
 async def run(endpoint: str) -> None:
-    async with Client(endpoint) as client:
+    async with streamablehttp_client(endpoint) as (read_stream, write_stream, _):
+        async with ClientSession(read_stream, write_stream) as client:
+            await client.initialize()
+            await _run_acceptance_checks(client, endpoint)
+
+
+async def _run_acceptance_checks(client, endpoint: str) -> None:
         tool_result = await client.list_tools()
         names = {tool.name for tool in tool_result.tools}
         missing = REQUIRED_TOOLS - names
