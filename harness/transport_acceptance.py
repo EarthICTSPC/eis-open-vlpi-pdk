@@ -11,6 +11,7 @@ import argparse
 import asyncio
 import json
 import sys
+import traceback
 
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
@@ -128,6 +129,7 @@ def main() -> int:
         asyncio.run(run(args.endpoint))
     except Exception as exc:
         print(f"MCP TRANSPORT ACCEPTANCE: FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)
+        traceback.print_exception(exc)
         return 1
     return 0
 
