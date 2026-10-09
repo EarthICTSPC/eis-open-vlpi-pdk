@@ -112,9 +112,15 @@ async def _run_acceptance_checks(client, endpoint: str) -> None:
     if structured(composition)["accepted_interface"] is not True:
         raise AssertionError("composition interface not accepted")
 
-    malformed = await client.call_tool("transition", {"state_id": state_id})
+    # Use a complete request that violates the service contract. Missing
+    # required arguments may be handled differently by SDK/schema versions,
+    # whereas an unknown state ID must be rejected by ExperimentState.
+    malformed = await client.call_tool(
+        "transition",
+        {"state_id": "transport_acceptance_missing_state", "phase_delta": 0.25},
+    )
     if not getattr(malformed, "is_error", False):
-        raise AssertionError("malformed transition was not rejected")
+        raise AssertionError("transition with unknown state_id was not rejected")
 
     print("MCP TRANSPORT ACCEPTANCE: FULL PASS")
     print(f"endpoint={endpoint}")
