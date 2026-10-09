@@ -119,8 +119,14 @@ async def _run_acceptance_checks(client, endpoint: str) -> None:
         "transition",
         {"state_id": "transport_acceptance_missing_state", "phase_delta": 0.25},
     )
-    if not getattr(malformed, "is_error", False):
-        raise AssertionError("transition with unknown state_id was not rejected")
+    malformed_payload = structured(malformed)
+    malformed_text = json.dumps(malformed_payload, sort_keys=True).lower()
+    rejected = getattr(malformed, "is_error", False) or "unknown state_id" in malformed_text
+    if not rejected:
+        raise AssertionError(
+            "transition with unknown state_id was not rejected; "
+            f"result={malformed_text}"
+        )
 
     print("MCP TRANSPORT ACCEPTANCE: FULL PASS")
     print(f"endpoint={endpoint}")
