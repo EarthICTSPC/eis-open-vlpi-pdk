@@ -79,21 +79,15 @@ Do not insert assumed “typical” values as if they were foundry data. Begin w
 
 CRC rejection must preserve the contract: report why a candidate is infeasible and what assumptions caused rejection. A candidate that survives CRC is only eligible for physics simulation; it has not passed physics or physical validation.
 
-## Acceptance criteria — freeze before inspecting candidate results
+## Frozen acceptance criteria and physical-model gate
 
-The following must be filled and versioned before candidate outputs are inspected:
-- score encoding and normalization;
-- reference ordering and tie policy;
-- minimum distinguishable score gap;
-- allowed false-winner rate / required test count;
-- operating envelope for input power imbalance and noise;
-- output optical contrast / separability criterion;
-- maximum insertion loss;
-- maximum comparator latency / recovery time;
-- energy boundary and maximum energy per comparison;
-- allowed variation and robustness criteria.
+Version `EIS-CRC-FIRST-PAIRWISE-001-AC-v1` freezes the normalized behavioral contract: scores in [0,1], synthetic indifference gap 0.05, no forced winner within the gap, winner identity required, and zero false-winner decisions in a preregistered 3,000-vector screening set outside the gap. The 0.05 gap is a software screening convention, not a PRISM workload requirement.
 
-Until populated, the experiment status is `SPECIFIED_NOT_PREREGISTERED`, not PASS. The behavioral tests check software plumbing only and do not choose scientific acceptance thresholds.
+See:
+- [Frozen screening criteria v1](acceptance_criteria_v1.md)
+- [Analytical model and physics gate](analytical_model_gate.md)
+
+Physical budgets for contrast, loss, latency/recovery, energy and variation remain unset because the current sources do not establish workload-approved values. The candidate-specific score encoding and physical decision mechanism are also not established. Therefore status is `BLOCKED_PHYSICAL_BUDGET` / `BLOCKED` for FDTD/EM authorization. Do not spend on FDTD/EM until the analytical model and physical budgets pass the documented gate.
 
 ## Required evidence
 
