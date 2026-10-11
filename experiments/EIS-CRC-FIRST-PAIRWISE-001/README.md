@@ -88,8 +88,10 @@ See:
 - [Analytical model and physics gate](analytical_model_gate.md)
 - [Source-backed analytical comparator model v1](analytical_comparator_model_v1.md)
 - [Physical budget register and approval record](physical_budget_register_v1.md)
+- [Workload evidence protocol v1](workload_evidence_protocol_v1.md)
+- [Workload trace JSON Schema](workload_trace.schema.json)
 
-Physical budgets for contrast, loss, latency/recovery, energy and variation remain unset because the current sources do not establish workload-approved values. The candidate-specific score encoding and physical decision mechanism are also not established. Therefore status is `BLOCKED_PHYSICAL_BUDGET` / `BLOCKED` for FDTD/EM authorization. Do not spend on FDTD/EM until the analytical model and physical budgets pass the documented gate.
+Public PRISM aggregate/downstream artifacts have been inventoried, but they do not provide the frozen candidate-level score vectors needed to derive an approved score-gap/error budget. The trace capture protocol and schema are now documented. Physical budgets for contrast, loss, latency/recovery, energy and variation remain unset because the current sources do not establish workload-approved values. The candidate-specific score encoding and physical decision mechanism are also not established. Therefore status is `BLOCKED_PHYSICAL_BUDGET` / `BLOCKED` for FDTD/EM authorization. Do not spend on FDTD/EM until the analytical model and physical budgets pass the documented gate.
 
 ## Required evidence
 
