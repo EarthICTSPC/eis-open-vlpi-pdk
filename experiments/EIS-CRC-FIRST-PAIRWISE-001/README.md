@@ -86,6 +86,8 @@ Version `EIS-CRC-FIRST-PAIRWISE-001-AC-v1` freezes the normalized behavioral con
 See:
 - [Frozen screening criteria v1](acceptance_criteria_v1.md)
 - [Analytical model and physics gate](analytical_model_gate.md)
+- [Source-backed analytical comparator model v1](analytical_comparator_model_v1.md)
+- [Physical budget register and approval record](physical_budget_register_v1.md)
 
 Physical budgets for contrast, loss, latency/recovery, energy and variation remain unset because the current sources do not establish workload-approved values. The candidate-specific score encoding and physical decision mechanism are also not established. Therefore status is `BLOCKED_PHYSICAL_BUDGET` / `BLOCKED` for FDTD/EM authorization. Do not spend on FDTD/EM until the analytical model and physical budgets pass the documented gate.
 
