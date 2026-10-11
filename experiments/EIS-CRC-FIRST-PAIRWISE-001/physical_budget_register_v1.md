@@ -72,3 +72,22 @@ No approval is inferred from repository edits, a successful CI run, or an assist
 Current decision: **BLOCKED_PHYSICAL_BUDGET / NO FDTD-EM SPEND**.
 
 The next non-simulation action is to acquire representative score traces and define the workload-service boundary. Then complete and sign this register, parameterize the analytical Interface A baseline, and separately decide whether a credible B1 detector-free mechanism exists. After the model and budgets pass independent review, authorize only the smallest simulation that resolves a named uncertainty.
+
+## 7. Workload evidence inventory update (2026-10-11)
+
+Public PRISM repository artifacts have now been inspected:
+
+- `results/downstream/mrr_niah_v2b.json` contains configuration metadata and aggregate downstream outcomes.
+- `results/signatures/recall_bf16_8k.json` contains aggregate recall values by configuration.
+- `results/retrieval_heads/` contains retrieval-head evaluation records.
+- `results/raw_logs/` contains run logs.
+- `prism/simulator.py` exposes `PRISMSimulator.select_with_scores(query)`, which returns candidate scores from the software-emulated impairment path and selected indices.
+
+These are useful starting evidence, but the checked-in aggregate result files do **not** themselves provide the frozen, per-query, candidate-level score-vector corpus required to approve a comparator gap or false-winner budget. Software-emulated score traces must be exported from a pinned PRISM commit and clearly labelled **SOFTWARE_EMULATED**; they are not measured hardware evidence.
+
+EIS has added:
+- `workload_evidence_protocol_v1.md` — capture protocol, source inventory, required metrics, and approval inputs.
+- `workload_trace.schema.json` — trace schema including provenance, workload configuration, candidate-level scores/ranks, reference and emulated top-k IDs, and declared system boundaries.
+
+**Current register state remains unchanged:** no trace artifact hash, approved workload distribution, end-to-end quality tolerance, complete service energy/latency boundary, or accountable owner approval has been recorded. Numeric physical budgets therefore remain **NOT APPROVED**. **FDTD/EM remains NO-GO.**
+
