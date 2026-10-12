@@ -39,5 +39,12 @@
   "expected_rejection_stage": "KKA",
   "expected_reason": "pipeline_latency_budget_exceeded",
   "expected_dispatch": "not_dispatched",
-  "physical_validation": false
+  "physical_validation": false,
+  "expected_rejection_phase": "pre_dispatch",
+  "expected_side_effects": {
+    "flexagent_dispatched": false,
+    "pdk_netlist_generated": false,
+    "simulation_started": false,
+    "fabrication_attempted": false
+  }
 }
