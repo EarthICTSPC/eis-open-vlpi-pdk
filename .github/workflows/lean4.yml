@@ -36,3 +36,6 @@ jobs:
         run: lake update
       - name: Build formal project
         run: lake build
+      - name: Run shared Python budget regression
+        working-directory: .
+        run: python -m unittest discover -s tests -p 'test_crc_budget_001.py' -v
