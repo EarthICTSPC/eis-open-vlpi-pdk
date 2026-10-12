@@ -28,6 +28,7 @@ jobs:
         uses: leanprover/lean-action@v1
         with:
           lake-package-directory: formal/lean4
+          auto-config: false
           use-mathlib-cache: false
       - name: Build formal project
         run: lake build
