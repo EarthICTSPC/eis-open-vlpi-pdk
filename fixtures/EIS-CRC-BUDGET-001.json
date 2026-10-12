@@ -1,0 +1,43 @@
+{
+  "id": "EIS-CRC-BUDGET-001",
+  "description": "Synthetic serial-additive pipeline latency budget regression; not physical validation.",
+  "timing_model": "serial_additive",
+  "latency_unit": "ps",
+  "budget_ps": 200,
+  "stages": [
+    {
+      "name": "DAC",
+      "latency_ps": 10
+    },
+    {
+      "name": "Modulator",
+      "latency_ps": 5
+    },
+    {
+      "name": "PRISM",
+      "latency_ps": 40
+    },
+    {
+      "name": "Thresholder",
+      "latency_ps": 30
+    },
+    {
+      "name": "KKA",
+      "latency_ps": 120
+    },
+    {
+      "name": "Photodetector",
+      "latency_ps": 15
+    },
+    {
+      "name": "ADC",
+      "latency_ps": 8
+    }
+  ],
+  "expected_total_ps": 228,
+  "expected_overrun_ps": 28,
+  "expected_rejection_stage": "KKA",
+  "expected_reason": "pipeline_latency_budget_exceeded",
+  "expected_dispatch": "not_dispatched",
+  "physical_validation": false
+}
