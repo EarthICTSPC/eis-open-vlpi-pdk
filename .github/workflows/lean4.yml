@@ -27,6 +27,7 @@ jobs:
       - name: Install Lean toolchain
         uses: leanprover/lean-action@v1
         with:
+          lake-package-directory: formal/lean4
           use-mathlib-cache: false
       - name: Build formal project
         run: lake build
