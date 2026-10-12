@@ -34,6 +34,9 @@ jobs:
           "$HOME/.elan/bin/lake" --version
       - name: Resolve Lake package metadata
         run: lake update
+      - name: Verify generated Lean fixture is current
+        working-directory: .
+        run: python scripts/gen_lean_fixture.py --check
       - name: Build formal project
         run: lake build
       - name: Run shared Python budget regression
