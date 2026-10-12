@@ -66,12 +66,12 @@ def render(fixture: dict) -> str:
         "  decide",
         "theorem rejected : pipelineWithinBudget stageLatencies budget = false := by",
         "  decide",
-        f"theorem cumulative_before_{names[first_over].lower()}_within_budget : cumulativeLatencies[{first_over}]! > budget := by",
+        f"theorem cumulative_at_{stage_name.lower()}_exceeds_budget : cumulativeLatencies[{first_over}]! > budget := by",
         "  decide",
     ]
     if first_over > 0:
         lines += [
-            f"theorem cumulative_before_{stage_name.lower()}_previous_within_budget : cumulativeLatencies[{first_over - 1}]! <= budget := by",
+            f"theorem cumulative_before_{stage_name.lower()}_within_budget : cumulativeLatencies[{first_over - 1}]! <= budget := by",
             "  decide",
         ]
     lines += [
