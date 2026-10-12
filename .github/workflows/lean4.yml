@@ -1,0 +1,32 @@
+name: Lean 4 formal checks
+
+on:
+  push:
+    paths:
+      - 'formal/lean4/**'
+      - '.github/workflows/lean4.yml'
+  pull_request:
+    paths:
+      - 'formal/lean4/**'
+      - '.github/workflows/lean4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean-build:
+    name: Build and check EIS VLPI formalization
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: formal/lean4
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Install Lean toolchain
+        uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: false
+      - name: Build formal project
+        run: lake build
