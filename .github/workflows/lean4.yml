@@ -24,11 +24,15 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      - name: Install Lean toolchain
-        uses: leanprover/lean-action@v1
-        with:
-          lake-package-directory: formal/lean4
-          auto-config: false
-          use-mathlib-cache: false
+      - name: Install pinned Lean toolchain
+        shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain leanprover/lean4:v4.19.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/lean" --version
+          "$HOME/.elan/bin/lake" --version
+      - name: Resolve Lake package metadata
+        run: lake update
       - name: Build formal project
         run: lake build
