@@ -1,3 +1,6 @@
+import EISVLPI.Fixtures.EIS_CRC_BUDGET_001
+import EISVLPI.Fixtures.EIS_KKA_CRITICAL_PATH_001
+
 /-!
 # EIS VLPI formal foundation
 
