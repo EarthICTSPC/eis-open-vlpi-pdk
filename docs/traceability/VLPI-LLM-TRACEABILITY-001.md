@@ -116,3 +116,76 @@ A pass at one gate never implies a pass at a later gate.
 6. Bind physical simulations and future fab measurements to the same contract IDs and versioned artifact identities.
 
 **Non-claims:** This document does not establish that a complete VLPI LLM has been formally specified, that production dispatch is gated, that a photonic KKA meets 200 ps, that conventional digital KKA does or does not meet 200 ps, or that any physical device has passed conformance.
+
+## 8. Market competition requirement: AI service tiers
+
+The 200 ps target is a **market-competition requirement**, but it must be scoped to a defined service tier and timing boundary before it becomes an enforceable acceptance criterion. Model parameter count is a useful descriptor, not a sufficient workload specification: architecture (dense/MoE), active parameters, context length, output length, precision, batching, concurrency, and quality target all affect the work.
+
+The ranges below are **proposed EIS planning bands, not an industry standard**. They are intended to organize market comparisons and should be refined against the first chosen workload and customer use case.
+
+| EIS planning tier | Indicative model scale (parameters) | Example service class | Required benchmark emphasis |
+|---|---:|---|---|
+| Small / edge | Up to about 10B | Local assistant, classification, extraction, compact coding/reasoning | Single-request latency, memory footprint, joules per accepted result |
+| Medium / general purpose | About 10B–70B | General assistant, retrieval-augmented generation, coding assistance | Time to first token, decode throughput, context sensitivity, energy per request |
+| Large / high capability | About 70B–200B | Complex coding, longer-context assistance, more demanding reasoning | Tail latency, concurrency, memory movement, energy and cooling under sustained load |
+| Frontier | Above about 200B effective/total scale, or a leading-capability model regardless of size | Frontier reasoning, agentic and long-horizon tasks | Same-quality useful work, long-reasoning cost, sustained throughput, facility and thermal limits |
+
+Parameter ranges are not sufficient to classify mixture-of-experts systems; EIS should record both total and active parameters when known. Frontier is also a capability category, not strictly a parameter-count category. A smaller model may be frontier-capable on a particular task, while a large model may not be state of the art.
+
+Market evidence reinforces the need to compare the *same useful service*: Stanford's AI Index reports that smaller models have improved substantially, while energy estimates vary widely by model and inference mode. A 2026 analysis reports materially higher energy for long reasoning than standard queries. These sources motivate measurement; they do not establish EIS hardware performance:
+- Stanford HAI, [AI Index 2025: State of AI in 10 Charts](https://hai.stanford.edu/news/ai-index-2025-state-ai-10-charts).
+- Stanford HAI, [AI Index Report 2026 — Energy and Environmental Impact](https://hai.stanford.edu/assets/files/ai_index_report_2026.pdf).
+- Oviedo et al., [Energy use of AI inference, efficiency pathways, and test-time scaling](https://www.sciencedirect.com/science/article/pii/S2542435126001145), 2026.
+
+### Define the 200 ps requirement at the right level
+
+A 200 ps (0.2 ns) target is so short that EIS must explicitly state what event begins the clock and what event ends it. It may be a **subsystem or KKA-stage deadline**, rather than a full LLM request/response deadline. A complete LLM service includes many sequential or iterative operations and cannot be represented by a single KKA-stage timing number.
+
+For the first acceptance record, specify:
+1. **Tier and workload:** model/architecture, total and active parameters where applicable, input/context distribution, output or decision contract, precision, batch size, and concurrency.
+2. **Service boundary:** named start and stop events; identify which encoding, memory, routing, conversion, calibration, and control costs are inside or outside the budget.
+3. **Latency metric:** distinguish KKA-stage latency, request latency, time to first token, inter-token latency, throughput, and tail latency. Do not substitute one for another.
+4. **Quality floor:** the same task-level correctness/quality acceptance for photonic and digital candidates.
+5. **Thermal/energy budget:** define energy per accepted useful result, average and peak power, sustained thermal state, cooling/control overhead, and the operating environment.
+6. **Market baseline:** identify the conventional digital implementation and benchmark version against which the requirement is competitive.
+
+The 200 ps requirement should initially be recorded as a **system-level market target whose exact scope is pending tier/workload definition**. The fixture's 200 ps value is its explicit test budget. These statements are compatible: the fixture tests rejection logic, while the market requirement must be bound to a concrete service before performance claims are made.
+
+## 9. EIS thermal-budget hypothesis and overlap/parallelism
+
+**EIS hypothesis:** a cool VLPI implementation may improve useful computation per joule and reduce thermal-management overhead relative to a conventional VLSI implementation. This is a research hypothesis, not yet a demonstrated result. Optical propagation does not mean zero energy, zero heat, or zero thermal control: lasers, modulators, phase control, detectors, electronic control, memory, and conversion may all contribute energy and heat.
+
+The architecture may permit parallel execution and/or stage overlap. The model must not assume that every stage is serially additive, but it also must not assume overlap is free or feasible. For each proposed parallel/overlapped path, declare:
+- dependencies and which operations can execute concurrently;
+- resource conflicts, fan-out, synchronization, phase/calibration requirements, and data availability;
+- stage service times versus queueing and transfer times;
+- whether the measured quantity is critical-path latency or sum of component latencies;
+- power and thermal behavior during concurrency, including peak loads;
+- output correctness and repeatability under the same workload.
+
+For a strictly serial pipeline, total latency is the sum of stage latencies. For a dependency graph with parallel work, latency is governed by the scheduled critical path plus relevant synchronization, queueing, and interface costs—not the simple sum of all stage latencies. Energy generally still accounts for the energy of all executed operations, even when they overlap in time. Lower latency therefore does not automatically mean lower energy or lower peak temperature.
+
+### Required experiment matrix
+
+| Experiment | Hypothesis under test | Measure | What would count as evidence |
+|---|---|---|---|
+| A. Serial reference | Reproduce the current fixture and its first-exceed rejection | Per-stage values, cumulative arithmetic, gate outcome | Deterministic software regression only |
+| B. Dependency/critical-path model | Some stages can overlap without violating data dependencies | Schedule, critical path, synchronization overhead | Reproducible model with declared assumptions; not physical validation |
+| C. Parallel candidate | Concurrent photonic operations improve latency for the same accepted result | End-to-end and KKA latency, throughput, error/quality, peak power | Simulation or measurement tied to a named design and workload |
+| D. Thermal/energy comparison | VLPI reduces energy and/or thermal-management cost relative to digital baseline | Joules per accepted result, average/peak power, temperature, cooling/control energy | Matched-boundary, matched-quality data with uncertainty |
+| E. Fabricated-device validation | The actual PDK/device meets the formal physical contract | Measured latency, loss, error, power, drift, temperature and operating envelope as applicable | Attributable wafer/device data and passed acceptance criteria |
+
+The existing 228 ps fixture must remain unchanged as the **serial-additive reference regression**. A parallel/overlapped candidate should be a separate fixture with an explicit dependency graph and separately justified stage values. Do not alter the original fixture simply to make it pass.
+
+## 10. Revised next engineering sequence
+
+1. **Freeze the market requirement definition:** retain 200 ps as a competition target, then specify the first tier, useful KKA operation, timing boundary, output-quality floor, and whether 200 ps applies to KKA-only or end-to-end service.
+2. **Create the requirement ledger:** classify every number as target, assumption, model estimate, simulation result, or physical measurement. Include a thermal/energy budget beside latency.
+3. **Formalize in Lean 4:** express typed stage contracts, timing semantics, dependency/parallelism assumptions, rejection conditions, and energy/thermal quantities where units and models are sufficiently defined.
+4. **Preserve the serial fixture:** keep its 228 ps total and KKA first crossing at 205 ps as a regression for the serial-additive model.
+5. **Build a separate overlap model:** represent dependencies explicitly and compute critical-path latency; state what the model omits and do not call it physical validation.
+6. **Enforce at the real dispatch boundary:** identify the production orchestrator, route every relevant dispatch path through the contract gate, and test that rejected operations produce no forbidden side effects.
+7. **Benchmark a matched digital baseline:** same KKA service, quality, timing boundary, concurrency, and declared system overhead.
+8. **Validate against the actual PDK and fabricated devices:** bind simulation and measurement records to design/device identity and acceptance criteria before claiming competitive advantage.
+
+**Updated non-claim:** Neither a 200 ps photonic KKA nor a 200 ps conventional digital KKA has been established by the synthetic fixture. The thermal advantage and feasibility of parallelism/overlap remain explicit EIS hypotheses to test.
