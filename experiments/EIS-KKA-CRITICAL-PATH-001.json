@@ -1,0 +1,126 @@
+{
+  "id": "EIS-KKA-CRITICAL-PATH-001",
+  "status": "candidate schedule model; all timings are inherited synthetic values or explicitly marked hypotheses",
+  "service": {
+    "name": "top-k selected-block KKA service",
+    "contract": "Given a query and a PRISM/Thresholder-selected set of KV blocks, compute KKA output for those blocks and emit a result at the declared output boundary.",
+    "boundary_start": "DAC input presentation",
+    "boundary_end": "ADC output availability",
+    "target_ps": 200,
+    "quality_equivalence": "not yet specified; required before comparison against digital baseline"
+  },
+  "baseline": {
+    "timing_model": "serial_additive",
+    "source_fixture": "fixtures/EIS-CRC-BUDGET-001.json",
+    "expected_total_ps": 228,
+    "physical_validation": false
+  },
+  "assumptions": [
+    "DAC and Modulator are sequential: input encoding must precede optical PRISM computation.",
+    "Thresholder selection depends on PRISM results.",
+    "Both KKA lanes consume the same selected-block set and can run independently; this is an architectural hypothesis, not established by a KKA implementation.",
+    "KKA lane duration 60 ps is a hypothetical 2-way parallel candidate derived from the synthetic 120 ps KKA fixture; it is not a measured speedup.",
+    "The join/routing/synchronization operation costs 15 ps, an explicit unvalidated allowance.",
+    "Photodetection and ADC occur after joined KKA output.",
+    "No queueing, clock-domain crossing, calibration delay, retry, or thermal throttling is included unless represented as a task."
+  ],
+  "tasks": [
+    {
+      "id": "dac",
+      "name": "DAC",
+      "duration_ps": 10,
+      "deps": [],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "modulator",
+      "name": "Modulator",
+      "duration_ps": 5,
+      "deps": [
+        "dac"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "prism",
+      "name": "PRISM",
+      "duration_ps": 40,
+      "deps": [
+        "modulator"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "thresholder",
+      "name": "Thresholder",
+      "duration_ps": 30,
+      "deps": [
+        "prism"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "kka_lane_a",
+      "name": "KKA lane A",
+      "duration_ps": 60,
+      "deps": [
+        "thresholder"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "kka_lane_b",
+      "name": "KKA lane B",
+      "duration_ps": 60,
+      "deps": [
+        "thresholder"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "join_route_sync",
+      "name": "Join + routing + synchronization",
+      "duration_ps": 15,
+      "deps": [
+        "kka_lane_a",
+        "kka_lane_b"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "photodetector",
+      "name": "Photodetector",
+      "duration_ps": 15,
+      "deps": [
+        "join_route_sync"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    },
+    {
+      "id": "adc",
+      "name": "ADC",
+      "duration_ps": 8,
+      "deps": [
+        "photodetector"
+      ],
+      "energy_pj": null,
+      "peak_power_mw": null
+    }
+  ],
+  "expected_model_result": {
+    "critical_path_ps": 183,
+    "margin_ps": 17,
+    "target_met_in_model": true,
+    "physical_validation": false,
+    "energy_result": "not_evaluable_missing_per_task_energy",
+    "peak_power_result": "not_evaluable_missing_concurrent_power_and_supply_model"
+  }
+}
