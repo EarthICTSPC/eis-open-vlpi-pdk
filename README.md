@@ -1,10 +1,19 @@
-# EIS Open VLPI PDK
+# EIS PIC/VLPI Conductor — Agentic Design-Flow Orchestration
 
-**Earth ICT, SPC — Open enabling technical disclosure for Very Large Photonic Infrastructure (VLPI)**
+**Earth ICT, SPC (EIS) — Conductor/orchestration for agentic photonic integrated circuit (PIC) and Very Large Photonic Infrastructure (VLPI) design flows**
 
 > **Here is the architecture. Here are the contracts. Here are the interfaces. Here are the implementation rules. Here is the verification path. Here is the physical artifact. Make your own.**
 
-This repository is the open technical-disclosure layer of the Earth ICT, SPC (EIS) VLPI project.
+This repository is the evolving **conductor/orchestration and digital-twin workspace** for Earth ICT, SPC (EIS) PIC/VLPI design flows. Its primary focus is coordinating specialized AI agents and engineering tools through explicit contracts, typed interfaces, evidence, and reproducible handoffs. Open PDK disclosure is a supporting workstream—not the repository's sole or primary identity.
+
+The intended agentic workflow brings together:
+
+- **Harmonic / Aristotle / Lean 4** for formal specification and machine-checked properties;
+- **FlexCompute / FlexAgent** for photonic integrated-circuit (PIC) design exploration and physics-oriented workflows;
+- **GitHub** as the engineering digital twin: source, design artifacts, contracts, issues, CI, and traceable evidence;
+- **Fly.io** as a candidate hosting platform for the conductor/orchestration services, subject to deployment and operational validation.
+
+These are the intended roles in the EIS workflow, not a claim that every integration is already deployed or production-validated.
 
 It is deliberately organized differently from a research article. The **Research Article** records scientific questions, evidence, results, interpretation, and limits. This repository is intended to provide an **enabling technical disclosure** from which a technically skilled person can understand, reproduce, adapt, and independently implement compatible physical-computation systems.
 
