@@ -1,0 +1,53 @@
+{
+  "experiment_id": "EIS-SOFTMAX-001",
+  "freeze_stage": "G0",
+  "status": "INPUT_SOURCE_PINNED_HASHES_PENDING",
+  "task": "causal_next_token_prediction",
+  "context_length_tokens": 128,
+  "source": {
+    "hub": "huggingface.co",
+    "repo_type": "dataset",
+    "repo_id": "alooboii/pa1-tinystories",
+    "revision": "3b0e624a62a320d09c1ef9378b7e4f1b6fed6e38",
+    "files": [
+      "metadata.json",
+      "tokenizer/tokenizer.json",
+      "debug/train.bin",
+      "debug/validation.bin"
+    ],
+    "file_format": "little-endian uint16 token IDs for .bin files",
+    "selection_note": "The source revision and file paths are pinned from the dataset publisher's published download instructions. This is not yet a completed local materialization or verified content-hash freeze."
+  },
+  "tokenizer": {
+    "source_file": "tokenizer/tokenizer.json",
+    "repo_id": "alooboii/pa1-tinystories",
+    "revision": "3b0e624a62a320d09c1ef9378b7e4f1b6fed6e38",
+    "sha256": null,
+    "status": "pending_materialization_and_hash"
+  },
+  "splits": {
+    "train": {
+      "source_file": "debug/train.bin",
+      "sha256": null,
+      "status": "pending_materialization_and_hash"
+    },
+    "validation": {
+      "source_file": "debug/validation.bin",
+      "sha256": null,
+      "status": "pending_materialization_and_hash"
+    },
+    "test": {
+      "source_file": null,
+      "sha256": null,
+      "status": "not_defined",
+      "note": "Do not derive a test split from validation or report G0 complete until an independently defined test split is justified and frozen."
+    }
+  },
+  "g0_status": "BLOCKED",
+  "blockers": [
+    "Materialize the pinned source files and record actual SHA-256 hashes.",
+    "Inspect metadata and verify train/validation example identity separation.",
+    "Define and materialize a held-out test split without leakage, or formally revise the protocol to a validation-only software screening experiment before execution.",
+    "Pin preprocessing code and its hash."
+  ]
+}
