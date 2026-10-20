@@ -1,4 +1,4 @@
-# EIS Open VLPI PDK
+# eis-open-vlpi-vlsi-conductor
 
 **Earth ICT, SPC — Open enabling technical disclosure for Very Large Photonic Infrastructure (VLPI)**
 
@@ -316,7 +316,10 @@ T_{KKA-cache}
 with a state progression conceptually represented as:
 
 [
-H_{QKV}ightarrow H_{similarity}ightarrow H_{selected}ightarrow H_{attention}.
+H_{QKV}
+ightarrow H_{similarity}
+ightarrow H_{selected}
+ightarrow H_{attention}.
 ]
 
 A central research question is:
