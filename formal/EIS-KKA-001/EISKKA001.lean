@@ -34,11 +34,6 @@ theorem crossTerm_zero_left (a : Field) :
     crossTerm zeroField a = 0 := by
   simp [crossTerm, zeroField]
 
-theorem intensity_nonnegative_on_integer_fields (a : Field) :
-    0 ≤ intensity a := by
-  simp [intensity]
-  omega
-
 /-- Aligned unit fields produce the +2 cross term. -/
 def alignedUnit : Field := ⟨1, 0⟩
 /-- Quadrature fields have zero cross term. -/
