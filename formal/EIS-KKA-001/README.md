@@ -23,6 +23,11 @@ lake build
 python -m unittest discover -s tests -v
 ```
 
+
+## Language and array-layout neutrality
+
+The normative contract describes logical values and operations, not a language's memory order. Julia's dense multidimensional arrays are column-major (the first index varies fastest in contiguous storage); NumPy's default arrays are commonly row-major, and tensor libraries can also represent non-default strides. These are storage/layout conventions, not different mathematical meanings. Any future tensor-level contract must name axes, shapes, and indexing semantics explicitly; each backend adapter must document strides, transposes, copies, and layout conversions. Do not choose Julia or PyTorch merely to inherit a particular matrix-storage convention.
+
 ## Evidence boundary
 
 The suite checks aligned, quadrature, anti-aligned and zero-field cases, symmetry, phase response, and a magnitude bound. Passing it does **not** establish equivalence to every Tian et al. equation; full attention semantics, normalization, training behavior, LLM quality; a formal Lean-to-Python equivalence; or performance/compatibility of a physical device.
