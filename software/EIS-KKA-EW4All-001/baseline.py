@@ -107,18 +107,47 @@ def evaluate_binary(y_true, probability) -> dict:
     }
 
 
-def run_baselines(csv_path: str, output_path: str, features: Sequence[str]) -> dict:
+def persistence_probability(frame: pd.DataFrame, feature: str, threshold: float) -> np.ndarray:
+    """Simple transparent persistence/event-state baseline.
+
+    The feature and threshold must have compatible units and be frozen in the
+    experiment manifest. This is a deterministic alert probability (0 or 1),
+    not a calibrated probabilistic forecast.
+    """
+    if feature not in frame.columns:
+        raise ValueError(f"persistence feature not found: {feature}")
+    values = pd.to_numeric(frame[feature], errors="coerce")
+    if values.isna().any():
+        raise ValueError(f"persistence feature {feature} contains missing/non-numeric values")
+    return (values.to_numpy(dtype=float) >= threshold).astype(float)
+
+
+def run_baselines(
+    csv_path: str,
+    output_path: str,
+    features: Sequence[str],
+    persistence_feature: str,
+    persistence_threshold: float,
+) -> dict:
     frame = pd.read_csv(csv_path)
     validate_frame(frame, features)
     train, validation, test = chronological_event_split(
         frame, train_end="2020-01-01T00:00:00Z", validation_end="2022-01-01T00:00:00Z"
     )
+    if persistence_feature not in frame.columns:
+        raise ValueError(f"persistence feature not found: {persistence_feature}")
     results = {
         "artifact": "EIS-KKA-EW4All-001",
         "spec_version": "0.1.0",
         "status": "software_baseline_run",
         "input_csv": str(Path(csv_path)),
         "features": list(features),
+        "persistence": {
+            "feature": persistence_feature,
+            "threshold": persistence_threshold,
+            "threshold_units": "must match the declared units of the persistence feature",
+            "probability_interpretation": "deterministic 0/1 event-state baseline; not calibrated",
+        },
         "split_rows": {"train": len(train), "validation": len(validation), "test": len(test)},
         "split_events": {"train": int(train.event_id.nunique()),
                          "validation": int(validation.event_id.nunique()),
@@ -128,6 +157,13 @@ def run_baselines(csv_path: str, output_path: str, features: Sequence[str]) -> d
             "Metrics apply only to this supplied CSV and split. They do not establish "
             "operational warning readiness or photonic energy savings."
         ),
+    }
+    val_persistence = persistence_probability(validation, persistence_feature, persistence_threshold)
+    test_persistence = persistence_probability(test, persistence_feature, persistence_threshold)
+    results["models"]["persistence"] = {
+        "validation": evaluate_binary(validation.target, val_persistence),
+        "test": evaluate_binary(test.target, test_persistence),
+        "threshold_note": "Feature threshold is supplied by the operator and must match label/feature units; not a calibrated probability.",
     }
     for name, model in build_models().items():
         model.fit(train[list(features)], train.target.astype(int))
@@ -147,8 +183,14 @@ def main() -> None:
     parser.add_argument("--csv", required=True, help="Prepared feature/label CSV; no raw data are downloaded.")
     parser.add_argument("--out", default="baseline-results.json")
     parser.add_argument("--features", nargs="+", default=DEFAULT_FEATURES)
+    parser.add_argument("--persistence-feature", default="rain_60m")
+    parser.add_argument("--persistence-threshold", type=float, required=True,
+                        help="Threshold in the same units as --persistence-feature; freeze in manifest.")
     args = parser.parse_args()
-    print(json.dumps(run_baselines(args.csv, args.out, args.features), indent=2))
+    print(json.dumps(run_baselines(
+        args.csv, args.out, args.features,
+        args.persistence_feature, args.persistence_threshold
+    ), indent=2))
 
 
 if __name__ == "__main__":
