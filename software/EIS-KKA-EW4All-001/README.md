@@ -27,7 +27,7 @@ The harness reports thresholded POD/recall, precision, false-alarm ratio, CSI, B
 - Dataset acquisition and product-specific parsers.
 - Exact MRMS/IMERG product manifest and latency audit.
 - Rainfall-label generation and catchment/event association.
-- Persistence baseline, KKA dynamic/static/shuffled ablations, spatial-temporal model, event-level lead-time metrics and confidence intervals.
+- KKA dynamic/static/shuffled ablations, spatial-temporal model, event-level lead-time metrics and confidence intervals.
 - Lean-to-Python proof of correspondence.
 - Operational warning integration or photonic energy measurement.
 
