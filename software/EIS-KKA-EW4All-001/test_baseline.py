@@ -25,14 +25,15 @@ class BaselineContractTests(unittest.TestCase):
         frame = pd.DataFrame({
             "issue_time": [
                 "2019-01-01T00:00:00Z",
+                "2019-06-01T00:00:00Z",
                 "2020-06-01T00:00:00Z",
                 "2021-06-01T00:00:00Z",
                 "2022-06-01T00:00:00Z",
                 "2023-06-01T00:00:00Z",
             ],
-            "event_id": ["train", "crossing", "valid", "test", "test-later"],
-            "target": [0, 1, 0, 1, 0],
-            "rain_60m": [0.0, 10.0, 1.0, 15.0, 0.0],
+            "event_id": ["train", "crossing", "crossing", "valid", "test", "test-later"],
+            "target": [0, 1, 1, 0, 1, 0],
+            "rain_60m": [0.0, 10.0, 10.0, 1.0, 15.0, 0.0],
         })
         train, valid, test = chronological_event_split(
             frame, "2020-01-01T00:00:00Z", "2022-01-01T00:00:00Z"
