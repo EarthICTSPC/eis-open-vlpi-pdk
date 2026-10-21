@@ -1,0 +1,6 @@
+name = "eis-kka-001"
+version = "0.1.0"
+defaultTargets = ["EISKKA001"]
+
+[[lean_lib]]
+name = "EISKKA001"
