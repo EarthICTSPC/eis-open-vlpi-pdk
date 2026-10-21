@@ -1,0 +1,35 @@
+name: EIS KKA EW4All-001
+
+on:
+  pull_request:
+    branches:
+      - eis-kka-001-lean4-spec-conformance
+  push:
+    branches:
+      - eis-kka-001-lean4-spec-conformance
+      - eis-kka-ew4all-001-pilot-v0.1.0
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: formal/EIS-KKA-EW4All-001
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build-args: ""
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pandas numpy scikit-learn
+      - name: Run baseline contract tests
+        working-directory: software/EIS-KKA-EW4All-001
+        run: python -m unittest discover -s . -p "test_*.py" -v
