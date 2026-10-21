@@ -16,7 +16,7 @@ Feature values must be computed strictly from input data available by issue_time
 
 Install pandas, numpy and scikit-learn in a dedicated environment, prepare the input CSV, then:
 
-    python baseline.py --csv prepared-rainfall.csv --out baseline-results.json
+    python baseline.py --csv prepared-rainfall.csv --out baseline-results.json --persistence-threshold 10.0
 
 The harness uses starter chronological cutoffs (training before 2020; validation 2020–2021; test 2022 onward). Before a real study, choose cutoffs after auditing coverage, freeze them in the manifest, and update the spec/version if they change. Events crossing split boundaries are excluded from all splits.
 
