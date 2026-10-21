@@ -32,3 +32,7 @@ The harness reports thresholded POD/recall, precision, false-alarm ratio, CSI, B
 - Operational warning integration or photonic energy measurement.
 
 Do not interpret this harness's existence as experimental results.
+
+## CI
+
+The follow-on pull request adds GitHub Actions checks for the Lean project and Python baseline contract tests. A passing workflow is required before treating either as validated.
